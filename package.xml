@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package>
+  <name>RhobanUtils</name>
+  <version>0.0.0</version>
+  <description>The robocup refere for kid-size league</description>
+
+  <maintainer email="lhofer@labri.fr">Ludovic Hofer</maintainer>
+  <author email="lhofer@labri.fr">Ludovic Hofer</author>
+  <author email="gpassault@labri.fr">Grégoire Passault</author>
+  <author email="lhofer@labri.fr">Ludovic Hofer</author>
+  <author email="qrouxel@labri.fr">Quentin Rouxel</author>
+  <author email="snguyen@labri.fr">Steve N'guyen</author>
+
+  <license>TODO</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <export>
+  </export>
+</package>

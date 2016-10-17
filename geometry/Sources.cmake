@@ -1,0 +1,9 @@
+set(SOURCES
+  Angle.cpp
+  Point.cpp
+  Circle.cpp
+  CircleCluster.cpp
+  Interpolation.cpp
+  ParametricLine.cpp
+  PLCluster.cpp
+  )
