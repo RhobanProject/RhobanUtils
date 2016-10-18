@@ -30,6 +30,7 @@ set(SOURCES_DIRECTORIES
   history
   threading
   nominal
+  random
 )
 
 #Include Sources sub sources

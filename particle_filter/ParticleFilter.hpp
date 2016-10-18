@@ -3,12 +3,11 @@
 
 #include <algorithm>
 
-#include "linear_algebra.h"
-
 #include "Particle.hpp"
 #include "Controler.hpp"
 #include "Observation.hpp"
 
+#include "random/tools.h"
 #include "timing/Benchmark.hpp"
 
 // A real ParticleFilter concerns one particle type
@@ -18,11 +17,23 @@
 template<class P>
 class ParticleFilter {
   protected:
-    vector<std::pair<P,double>> particles;
+    std::default_random_engine engine;
+
+    std::vector<std::pair<P,double>> particles;
 
     P representativeParticle;
 
     double representativeQuality;
+
+    Eigen::MatrixXd getLimits(double * minValues, double * maxValues)
+    {
+      Eigen::MatrixXd limits;
+      for (unsigned int dim = 0; dim < P::getDim(); dim++) {
+        limits(dim,0) = minValues[dim];
+        limits(dim,1) = minValues[dim];
+      }
+      return limits;
+    }
 
     /**
      * Use an observation to update the score of the particles. A weight of x
@@ -71,9 +82,10 @@ class ParticleFilter {
         }
 
         // Preparing the new vector of particles
+        std::uniform_real_distribution<double> distrib(0.0, sum);
         vector<P> newParticles(particles.size());
         for (unsigned int i = 0; i < particles.size(); i++) {
-            double rand_val = uniform_rand(0.0, sum);
+            double rand_val = distrib(engine);
             // Finding k with a dichotomic method
             int start = 0;
             int end = particles.size();
@@ -105,7 +117,7 @@ class ParticleFilter {
         if (particles.size() == 0) return;
 
         int N = particles.size();
-        Matrix M = particles[0].first.toVector();
+        Eigen::VectorXd M = particles[0].first.toVector();
         for (int i = 1; i < N; i++) {
             M = M + particles[i].first.toVector();
         }
@@ -121,11 +133,15 @@ class ParticleFilter {
 
   public:
 
-    ParticleFilter<P>() : representativeQuality(0) {};
+    ParticleFilter<P>() : representativeQuality(0)
+    {
+        engine = getRandomEngine();
+    };
 
     virtual ~ParticleFilter() { clear(); };
 
     ParticleFilter<P>(const ParticleFilter & other){
+        engine = getRandomEngine();
         representativeParticle = other.representativeParticle.clone();
         representativeQuality = other.representativeQuality;
         for(int p=0; p < (int)other.particles.size(); p++){
@@ -136,7 +152,7 @@ class ParticleFilter {
     void initializeAtUniformRandom(double minVal,
                                    double maxVal,
                                    int particleNb){
-        Matrix center(P::getDim());
+        Eigen::VectorXd center(P::getDim());
         for (unsigned int k = 0; k < P::getDim(); k++){
             center[k] = 0.0;
         }
@@ -146,11 +162,11 @@ class ParticleFilter {
     void initializeAtUniformRandom(double minVal,
                                    double maxVal,
                                    int particleNb,
-                                   Matrix center){
+                                   const Eigen::VectorXd & center){
         clear();
         for(int k = 0; k < particleNb; k++) {
             P p;
-            Matrix m = center + random_matrix(P::getDim(), 1, minVal, maxVal);
+            const Eigen::VectorXd m = center + random_matrix(P::getDim(), 1, minVal, maxVal);
             p.setFromVector(m);
             particles.push_back(std::pair<P, double>(p, 1.0));
         }
@@ -160,16 +176,13 @@ class ParticleFilter {
                                   double * minValues,
                                   double * maxValues) {
         int particleNb = particles.size() * resampledRatio;
-        for(int k = 0; k < particleNb; k++) {
+        std::vector<size_t> particles_index;
+        particles_index = getKDistinctFromN(particleNb, particles.size(), &engine);
+        Eigen::MatrixXd limits = getLimits(minValues, maxValues);
+        for(int k : particles_index) {
             P p;
-            Matrix m = random_matrix(P::getDim(), 1, 0, 1);
-            for (unsigned int dim = 0; dim < P::getDim(); dim++) {
-                double min = minValues[dim];
-                double max = maxValues[dim];
-                double delta = max - min;
-                m.set(dim, 0, min + delta * m.get(dim, 0));
-            }
-            p.setFromVector(m);
+            // Generate a new particle using the limits 
+            p.setFromVector(getUniformSamples(limits, 1, &engine)[0]);
             particles[k] = std::pair<P, double>(p, 1.0);
         }
     }
@@ -179,16 +192,10 @@ class ParticleFilter {
                                    double * maxValues,
                                    int particleNb) {
         clear();
+        Eigen::MatrixXd limits = getLimits(minValues, maxValues);
         for(int k = 0; k < particleNb; k++) {
             P p;
-            Matrix m = random_matrix(P::getDim(), 1, 0, 1);
-            for (unsigned int dim = 0; dim < P::getDim(); dim++) {
-                double min = minValues[dim];
-                double max = maxValues[dim];
-                double delta = max - min;
-                m.set(dim, 0, min + delta * m.get(dim, 0));
-            }
-            p.setFromVector(m);
+            p.setFromVector(getUniformSamples(limits, 1, &engine)[0]);
             particles.push_back(std::pair<P, double>(p, 1.0));
         }
     }
