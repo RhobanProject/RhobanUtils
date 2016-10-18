@@ -1,11 +1,13 @@
 cmake_minimum_required(VERSION 2.8)
 project(RhobanUtils)
 
-find_package(catkin REQUIRED)
+find_package(catkin REQUIRED COMPONENTS
+  jsoncpp)
 
 catkin_package(
   INCLUDE_DIRS .
   LIBRARIES RhobanUtils
+  CATKIN_DEPENDS jsoncpp
 )
 
 include_directories(.)
@@ -42,3 +44,4 @@ foreach (DIRECTORY ${SOURCES_DIRECTORIES})
 endforeach (DIRECTORY)
 
 add_library (RhobanUtils ${ALL_SOURCES})
+target_link_libraries(RhobanUtils ${catkin_LIBRARIES})
