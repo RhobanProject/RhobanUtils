@@ -65,7 +65,7 @@ class ParticleFilter {
     virtual void select(){
         double sum = 0.0;
 
-        vector<double> particles_probas(particles.size());
+        std::vector<double> particles_probas(particles.size());
 
 
         // std::cout<<"DEBUG: NB PARTICLES "<<particles.size()<<std::endl;
@@ -83,7 +83,7 @@ class ParticleFilter {
 
         // Preparing the new vector of particles
         std::uniform_real_distribution<double> distrib(0.0, sum);
-        vector<P> newParticles(particles.size());
+        std::vector<P> newParticles(particles.size());
         for (unsigned int i = 0; i < particles.size(); i++) {
             double rand_val = distrib(engine);
             // Finding k with a dichotomic method

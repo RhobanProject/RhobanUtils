@@ -105,21 +105,6 @@ Angle Angle::operator+(const Angle & a) const{
   return Angle(value + a.value);
 }
 
-#ifdef ENABLE_OPENCV
-Angle Angle::angleBetween(const cv::Point3f & v1, const cv::Point3f & v2)
-{
-  double nv1 = norm(v1);
-  double nv2 = norm(v2);
-  if (nv1 < 1e-9 || nv2 < 1e-9) {
-      return 0;
-  }
-  double x = v1.dot(v2) / (nv1 * nv2);
-  if (x > 1.0) { x = 1.0;}
-  if (x < -1.0) { x = -1.0;}
-  return arccos(x);
-}
-#endif
-
 double cos(const Angle & a)
 {
   return cos(a.getValue() * M_PI / 180.0);
