@@ -27,7 +27,7 @@ class ParticleFilter {
 
     Eigen::MatrixXd getLimits(double * minValues, double * maxValues)
     {
-      Eigen::MatrixXd limits;
+      Eigen::MatrixXd limits(P::getDim(),2);
       for (unsigned int dim = 0; dim < P::getDim(); dim++) {
         limits(dim,0) = minValues[dim];
         limits(dim,1) = minValues[dim];
