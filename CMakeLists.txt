@@ -2,15 +2,16 @@ cmake_minimum_required(VERSION 2.8)
 project(RhobanUtils)
 
 find_package(catkin REQUIRED COMPONENTS
-  jsoncpp)
+  jsoncpp
+  model)
 
 catkin_package(
   INCLUDE_DIRS .
   LIBRARIES RhobanUtils
-  CATKIN_DEPENDS jsoncpp
+  CATKIN_DEPENDS jsoncpp model
 )
 
-include_directories(.)
+include_directories(. ${catkin_INCLUDE_DIRS})
 
 #Enable C++11
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wextra")
