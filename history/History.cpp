@@ -3,6 +3,7 @@
 History::History(double window) : 
     _mutex(),
     _isLogging(false),
+    _startLoggingTime(0.0),
     _windowSize(window),
     _values()
 {
@@ -110,6 +111,9 @@ void History::startLogging()
 {
     _mutex.lock();
     _isLogging = true;
+    if (_values.size() > 0) {
+        _startLoggingTime = _values.back().first;
+    }
     _mutex.unlock();
 }
 
@@ -119,9 +123,13 @@ void History::stopLogging(std::ostream& os, bool binary)
     _isLogging = false;
     if (!binary) {
         for (const auto& it : _values) {
-            os 
-                <<  std::setprecision(15) << it.first << " " 
-                <<  std::setprecision(15) << it.second << std::endl;
+            //Skip data in buffer before logging start
+            if (it.first >= _startLoggingTime) {
+                //Write data
+                os 
+                    <<  std::setprecision(15) << it.first << " " 
+                    <<  std::setprecision(15) << it.second << std::endl;
+            }
         }
     } else {
         size_t size = _values.size();

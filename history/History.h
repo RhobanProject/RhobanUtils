@@ -88,6 +88,12 @@ class History
         bool _isLogging;
 
         /**
+         * When logging, save first time
+         * to not write buffered data
+         */
+        double _startLoggingTime;
+
+        /**
          * Rolling buffer size in timestamp
          */
         double _windowSize;
