@@ -30,6 +30,7 @@ set(SOURCES_DIRECTORIES
   moves
   history
   threading
+  trajectory
   nominal
   random
 )
