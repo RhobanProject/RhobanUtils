@@ -1,6 +1,7 @@
 #include "HeadScan.h"
 
 #include <cmath>
+#include <iostream>
 #include <stdexcept>
 
 HeadScan::HeadScan()
@@ -13,6 +14,13 @@ HeadScan::HeadScan()
 
 int HeadScan::getNbRows() const
 {
+  if (min_overlap > fov_height)
+  {
+    std::ostringstream oss;
+    oss << "HeadScan::getNbRows: min_overlap > fov_height: "
+        << "( " << min_overlap << " > " << fov_height << " )";
+    throw std::runtime_error(oss.str());
+  }
   double missing_tilt = (max_tilt - min_tilt) - fov_height;
   // If camera cover the required field, one row is enough
   if (missing_tilt < 0) return 1;
@@ -24,6 +32,13 @@ int HeadScan::getNbRows() const
 
 int HeadScan::getNbCols() const
 {
+  if (min_overlap > fov_width)
+  {
+    std::ostringstream oss;
+    oss << "HeadScan::getNbCols: min_overlap > fov_width: "
+        << "( " << min_overlap << " > " << fov_width << " )";
+    throw std::runtime_error(oss.str());
+  }
   double missing_pan = 2 * max_pan - fov_width;
   // If camera cover the required field, one col is enough
   if (missing_pan < 0) return 1;
@@ -90,6 +105,7 @@ void HeadScan::synchronize()
   if (!dirty) return;
   updateControlPoints();
   updatePassageTimes();
+  dirty=false;
 }
 
 void HeadScan::updateControlPoints()
