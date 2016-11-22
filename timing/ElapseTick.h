@@ -1,5 +1,7 @@
 #pragma once
 
+#include "TimeStamp.hpp"
+
 /**
  * ElapseTick
  *
@@ -49,6 +51,6 @@ class ElapseTick
         /**
          * Elapsed computation
          */
-        float lastTimestamp;
+        Utils::Timing::TimeStamp lastTimestamp;
 };
 

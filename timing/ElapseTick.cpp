@@ -1,12 +1,13 @@
 #include "ElapseTick.h"
-#include "TimeStamp.hpp"
+
+using Utils::Timing::TimeStamp;
 
 ElapseTick::ElapseTick() :
     hasStats(false), 
     minTime(0.0),
     avgTime(0.0),
     maxTime(0.0),
-    lastTimestamp(now())
+    lastTimestamp(TimeStamp::now())
 {
 }
         
@@ -16,15 +17,15 @@ ElapseTick::~ElapseTick()
 
 void ElapseTick::tick()
 {
-    double nowT = now();
-    double elapsed = (nowT-lastTimestamp)/1000.0;
+    TimeStamp nowT = TimeStamp::now();
+    double elapsed = diffSec(lastTimestamp, nowT);
     lastTimestamp = nowT;
 
     //Call tick implementation
-    double start = now();
+    TimeStamp start = TimeStamp::now();
     bool isTicked = tick(elapsed);
-    double stop = now();
-    double duration = stop - start;
+    TimeStamp stop = TimeStamp::now();
+    double duration = diffMs(start, stop);
 
     //Compute stats
     if (isTicked) {

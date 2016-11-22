@@ -31,8 +31,3 @@ bool operator<(const Utils::Timing::TimeStamp & ts1,
     const Utils::Timing::TimeStamp & ts2);
 bool operator>(const Utils::Timing::TimeStamp & ts1,
     const Utils::Timing::TimeStamp & ts2);
-
-inline static double now() {
-    return Utils::Timing::TimeStamp::now().getTimeMS();
-}
-
