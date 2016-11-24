@@ -36,4 +36,7 @@ void addToClusters(const Circle & c,
                    std::vector<CircleCluster> & clusters,
                    float flatTol, float percentTol);
 
+std::vector<CircleCluster> createClusters(const std::vector<Circle> & circles,
+                                          float flatTol, float percentTol);
+
 #endif//CIRCLE_CLUSTER_HPP

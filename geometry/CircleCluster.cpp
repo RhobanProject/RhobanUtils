@@ -49,3 +49,14 @@ void addToClusters(const Circle & c,
     clusters.push_back(CircleCluster(c));
   }
 }
+
+std::vector<CircleCluster> createClusters(const std::vector<Circle> & circles,
+                                          float flatTol, float percentTol)
+{
+  std::vector<CircleCluster> clusters;
+  for (const Circle & c : circles)
+  {
+    addToClusters(c, clusters, flatTol, percentTol);
+  }
+  return clusters;
+}
