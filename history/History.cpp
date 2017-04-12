@@ -164,9 +164,7 @@ void History::loadReplay(
     //Read the number of data
     size_t size = 0;
     if (binary) {
-        char buffer[10];
-        is.read(buffer, sizeof(size_t));
-        size = *((size_t*)(buffer));
+        is.read((char*)&size, sizeof(size_t));
     }
     //Read the input stream
     while (true) {
@@ -178,12 +176,8 @@ void History::loadReplay(
                 _mutex.unlock();
                 return;
             }
-            char buffer1[10];
-            char buffer2[10];
-            is.read(buffer1, sizeof(double));
-            is.read(buffer2, sizeof(double));
-            timestamp = *((double*)(buffer1));
-            value = *((double*)(buffer2));
+            is.read((char*)&timestamp, sizeof(double));
+            is.read((char*)&value, sizeof(double));
             size--;
         } else {
             while (is.peek() == ' ' || is.peek() == '\n') {
