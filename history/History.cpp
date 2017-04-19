@@ -138,18 +138,13 @@ void History::stopLogging(std::ostream& os, bool binary)
             }
         }
     } else {
+        // When writing in binary, use all values
         size_t size = _values.size();
         os.write((const char*)&size, sizeof(size_t));
         for (const auto& it : _values) {
-            //Skip data in buffer before logging start
-            if (
-                _startLoggingTime > 0.0 &&
-                it.first >= _startLoggingTime
-            ) {
-                //Write binary data
-                os.write((const char*)&(it.first), sizeof(double)); 
-                os.write((const char*)&(it.second), sizeof(double)); 
-            }
+            //Write binary data
+            os.write((const char*)&(it.first), sizeof(double));
+            os.write((const char*)&(it.second), sizeof(double));
         }
     }
     _mutex.unlock();
@@ -193,8 +188,8 @@ void History::loadReplay(
         timestamp += timeShift;
         //Check that timestamp is increasing
         if (_values.size() > 0 && timestamp <= _values.back().first) {
-            _mutex.unlock();
-            throw std::logic_error("History invalid timestamp");
+           _mutex.unlock();
+           throw std::runtime_error("History invalid timestamp");
         }
         //Insert the value
         _values.push_back(std::pair<double, double>(timestamp, value));
