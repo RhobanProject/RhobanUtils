@@ -166,7 +166,6 @@ void Nominal::saveToJson(std::string filename)
     for (auto entry : bins) {
         auto bin = entry.second;
         Json::Value b(Json::arrayValue);
-        int m = 0;
         b[0] = eigenToJson(bin.mean);
         b[1] = eigenToJson(bin.cov);
         b[2] = eigenToJson(bin.icov);

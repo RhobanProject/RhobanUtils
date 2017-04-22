@@ -4,6 +4,9 @@
 template<class P>
 class Observation {
 public:
+
+  virtual ~Observation() {};
+
   /* Return the potential of a a particle according to the observation. */
   virtual double potential(const P & p) const = 0;
 
