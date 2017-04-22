@@ -77,7 +77,7 @@ private:
 
     void removeExcess()
         {
-            while (entries.size() > windowSize) {
+            while ((int)entries.size() > windowSize) {
                 entries.pop_front();
             }
         }

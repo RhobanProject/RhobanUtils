@@ -134,14 +134,12 @@ double Nominal::Bin::score(Eigen::VectorXd v)
 
 double Nominal::guessT(Eigen::VectorXd v)
 {
-    bool hasBest = false;
-    double bestScore;
+    double bestScore = std::numeric_limits<double>::max();
     double t = 0;
 
     for (auto bin : bins) {
         double score = bin.second.chi2(v);
-        if (!hasBest || score < bestScore) {
-            hasBest = true;
+        if (score < bestScore) {
             t = bin.first/(double)nbins;
             bestScore = score;
         }

@@ -37,7 +37,7 @@ set(SOURCES_DIRECTORIES
 
 #Include Sources sub sources
 foreach (DIRECTORY ${SOURCES_DIRECTORIES})
-    message("-- Sources: Adding ${DIRECTORY}/")
+    message(STATUS "-- Sources: Adding ${DIRECTORY}/")
     include (${DIRECTORY}/Sources.cmake)
     set (PREFIXED_SOURCES)
     foreach (SOURCE ${SOURCES})
