@@ -266,3 +266,21 @@ string today()
 	strftime(result, 80, "%Y_%m_%d", ttt);
 	return string(result);
 }
+
+std::string file_get_contents(std::string path)
+{
+    std::ifstream ifs(path.c_str());
+    std::string content((std::istreambuf_iterator<char>(ifs)),
+            (std::istreambuf_iterator<char>()));
+    return content;
+}
+
+void file_put_contents(std::string path, std::string contents)
+{
+    std::ofstream ofile(path.c_str());
+
+    if (ofile) {
+        ofile << contents;
+        ofile.close();
+    }   
+}

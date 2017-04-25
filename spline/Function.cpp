@@ -2,6 +2,7 @@
 #include <cstdlib>
 #include <cstdio>
 #include <json/json.h>
+#include <util.h>
 #include "Function.h"
 
 Function::Function()
@@ -15,14 +16,6 @@ void Function::clear()
     points_y.clear();
     ds.clear();
     nbPoints = 0;
-}
-
-static std::string file_get_contents(std::string path)
-{
-    std::ifstream ifs(path.c_str());
-    std::string content((std::istreambuf_iterator<char>(ifs)),
-            (std::istreambuf_iterator<char>()));
-    return content;
 }
 
 std::map<std::string, Function> Function::fromFile(std::string filename)

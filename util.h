@@ -155,5 +155,8 @@ string today();
 
 std::string camelize(std::string input);
 
+std::string file_get_contents(std::string path);
+void file_put_contents(std::string path, std::string contents);
+
 /*@}*/
 #endif
