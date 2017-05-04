@@ -51,6 +51,18 @@ void UDPBroadcast::openRead()
         std::cout << strerror(errno) << std::endl;
         return;
     }
+    
+    //Set broadcast permission
+    int opt = 1;
+    int error = setsockopt(_readFd, SOL_SOCKET, 
+        SO_BROADCAST, (const char *)&opt, sizeof(opt));
+    if (error == -1) {
+        std::cout << 
+            "ERROR: UDPBroadcast: Unable to configure read socket" << std::endl;
+        std::cout << strerror(errno) << std::endl;
+        closeRead();
+        return;
+    }
 
     //Bind socket to listening port
     SOCKADDR_IN addr;
@@ -58,7 +70,7 @@ void UDPBroadcast::openRead()
     addr.sin_family = AF_INET;
     addr.sin_port = htons(_portRead);
     addr.sin_addr.s_addr = htonl(INADDR_ANY);
-    int error = bind(_readFd, (SOCKADDR*)&addr, sizeof(addr));
+    error = bind(_readFd, (SOCKADDR*)&addr, sizeof(addr));
     if (error == -1) {
         std::cout << 
             "ERROR: UDPBroadcast: Unable to bind read socket" << std::endl;
@@ -81,10 +93,10 @@ void UDPBroadcast::openWrite()
         return;
     }
 
-    //Set broadcats permission
-	int opt = 1;
-	int error = setsockopt(_writeFd, SOL_SOCKET, 
-		SO_BROADCAST, (const char *)  &opt, sizeof(opt));
+    //Set broadcast permission
+    int opt = 1;
+    int error = setsockopt(_writeFd, SOL_SOCKET, 
+        SO_BROADCAST, (const char *)&opt, sizeof(opt));
     if (error == -1) {
         std::cout << 
             "ERROR: UDPBroadcast: Unable to configure write socket" << std::endl;
