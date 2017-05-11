@@ -8,7 +8,6 @@
 #include "Observation.hpp"
 
 #include "random/tools.h"
-#include "timing/Benchmark.hpp"
 
 // A real ParticleFilter concerns one particle type
 // P must be a Particle Type
@@ -243,43 +242,19 @@ class ParticleFilter {
                       double elapsedTime)
     {
 
-        Utils::Timing::Benchmark::open("Mutation");
         mutate(ctrl, elapsedTime);
-        Utils::Timing::Benchmark::close("Mutation");
 
 
         //We only select if we have new observations
         if(observations.size()>0)
         {
-            Utils::Timing::Benchmark::open("Applying observations");
-            /*
-              double sum = 0.0;
-              for (int i=0; i<(int) particles.size(); i++) {
-              sum += particles[i].second;
-              }
-            */
-
             for (auto& o : observations)
             {
                 apply(*o);
             }
-            /*
-              sum = 0.0;
-              for (int i=0; i<(int) particles.size(); i++) {
-              sum += particles[i].second;
-              }
-            */
-
-            Utils::Timing::Benchmark::close("Applying observations");
-
-            Utils::Timing::Benchmark::open("Selecting particles");
             select();
-            Utils::Timing::Benchmark::close("Selecting particles");
         }
-
-        Utils::Timing::Benchmark::open("Updating internal state");
         updateInternalValues();
-        Utils::Timing::Benchmark::close("Updating internal state");
     }
 
     unsigned int nbParticles() const{

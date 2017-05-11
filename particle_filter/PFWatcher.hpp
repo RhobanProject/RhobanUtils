@@ -34,7 +34,7 @@ public:
     PFWatcher() : windowSize(20), windowTime(15) {}
 
     /// Push the observations and remove outdated values
-    void pushObservations(const TimeStamp & ts,
+    void pushObservations(const Utils::Timing::TimeStamp & ts,
                           const ObservationSet & observations,
                           const T & representativeParticle)
         {
@@ -49,7 +49,7 @@ public:
         }
 
     /// retrieve the consistency score in [0,1] (remove outdated information if necessary)
-    double getScore(const TimeStamp & now)
+    double getScore(const Utils::Timing::TimeStamp & now)
         {
             removeOutdated(now);
             if (entries.size() == 0) {
@@ -82,7 +82,7 @@ private:
             }
         }
 
-    void removeOutdated(const TimeStamp & now)
+    void removeOutdated(const Utils::Timing::TimeStamp & now)
         {
             while (entries.size() > 0) {
                 double elapsed = diffSec(entries.front().ts, now);
