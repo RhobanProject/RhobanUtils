@@ -261,6 +261,33 @@ class ParticleFilter {
         return particles.size();
     }
 
+    /// Sample a subset of particles from the whole set
+    /// if new_nb_particles is equivalent to current number of particles: do Nothing
+    void resize(size_t new_nb_particles) {
+      // If number of particles is equivalent, do not change
+      if (new_nb_particles == nbParticles()) return;
+      // If the number of particles has been reduced, choose distinct particles
+      if (new_nb_particles < nbParticles()) {
+        std::vector<size_t> particles_index;
+        particles_index = getKDistinctFromN(new_nb_particles, particles.size(), &engine);
+        std::vector<std::pair<P,double>> new_particles;
+        new_particles.reserve(new_nb_particles);
+        for (size_t id : particles_index) {
+          new_particles.push_back(particles[id]);
+        }
+        particles = new_particles;
+      }
+      // If the number is higher, create new particles to complete
+      else {
+        size_t missing_particles = new_nb_particles - nbParticles();
+        std::uniform_int_distribution<int> id_distribution(0, (int)nbParticles());
+        for (size_t new_id = 0; new_id < missing_particles; new_id++) {
+          int id = id_distribution(engine);
+          particles.push_back(particles[id]);
+        }
+      }
+    }
+
     P getParticle(unsigned int index) const{
         return particles[index].first;
     }
