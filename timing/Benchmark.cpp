@@ -105,14 +105,10 @@ double Benchmark::close(bool print, int detailLevel, std::ostream & out)
 
   double elapsedTime = toClose->getTime();
   // Suppress Benchmark if the link is lost
-  if (current == NULL)
-  {
+  if (current == NULL) {
     delete(toClose);
   }
-  else if (toClose->name==std::string("Vision + Localisation"))
-    throw std::runtime_error("Vision+Localisation is not supposed to have a father: " + current->name);
-
-return elapsedTime;
+  return elapsedTime;
 }
 
 double Benchmark::getTime() const
