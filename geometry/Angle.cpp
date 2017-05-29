@@ -150,3 +150,16 @@ Angle operator/(const Angle& a, double x)
 ostream& operator<<(ostream& out, const Angle& a){
   return out << a.getValue();
 }
+
+
+
+double normalizeRad(double angleRad){
+  double value = fmod(angleRad, 2*M_PI);// Bound in [-2*pi, 2*pi]
+  if (value < -M_PI) {
+    value += 2*M_PI;
+  }
+  else if (value > M_PI) {
+    value -= 2*M_PI;
+  }
+  return value;
+}
