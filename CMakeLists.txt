@@ -31,7 +31,7 @@ set(SOURCES_DIRECTORIES
   history
   threading
   trajectory
-  nominal
+#  nominal #'tmp' removal of nominal due to a dependency to boost
   random
 )
 
