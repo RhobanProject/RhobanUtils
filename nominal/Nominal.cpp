@@ -3,7 +3,16 @@
 #include <stdexcept>
 #include <iostream>
 #include "Nominal.h"
-#include <boost/math/distributions/chi_squared.hpp>
+// #include <boost/math/distributions/chi_squared.hpp>
+
+double chi2_cdf(double x, double k)
+{
+    return sqrt(x);
+    /*
+    boost::math::chi_squared mydist(k);
+    return boost::math::cdf(mydist, x);
+    */
+}
 
 Json::Value eigenToJson(Eigen::VectorXd e)
 {
@@ -54,12 +63,6 @@ Eigen::MatrixXd jsonToEigenMatrix(Json::Value v)
     }
 
     return m;
-}
-
-double chi2_cdf(double x, double k)
-{
-    boost::math::chi_squared mydist(k);
-    return boost::math::cdf(mydist, x);
 }
 
 void Nominal::Bin::add(Eigen::VectorXd v)
