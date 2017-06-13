@@ -45,6 +45,28 @@ std::map<std::string, Function> Function::fromFile(std::string filename)
 
     return result;
 }
+        
+void Function::toFile(std::map<std::string, Function> &splines, std::string filename)
+{
+    Json::Value json(Json::objectValue);
+    Json::StyledWriter writer;
+
+    for (auto &entry : splines) {
+        auto &key = entry.first;
+        auto &spline = entry.second;
+        json[key] = Json::Value(Json::arrayValue);
+        for (int k=0; k<spline.nbPoints; k++) {
+            Json::Value pt(Json::arrayValue);
+            pt[0] = spline.points_x[k];
+            pt[1] = spline.points_y[k];
+            json[key][k] = pt;
+        }
+    }
+
+    std::string data;
+    data = writer.write(json);
+    file_put_contents(filename, data);
+}
 
 double Function::getXMax()
 {

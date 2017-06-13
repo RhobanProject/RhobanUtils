@@ -158,5 +158,8 @@ std::string camelize(std::string input);
 std::string file_get_contents(std::string path);
 void file_put_contents(std::string path, std::string contents);
 
+void replaceAll(std::string& str, const std::string& from, const std::string& to);
+bool strContains(const std::string &str, const std::string &other);
+
 /*@}*/
 #endif

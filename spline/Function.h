@@ -4,10 +4,6 @@
 #include <map>
 #include <string>
 
-#ifndef FUNCTION_DEFAULT_POINTS
-#define FUNCTION_DEFAULT_POINTS 16
-#endif
-
 class Function
 {
     public:
@@ -34,11 +30,6 @@ class Function
         double getMod(double x);
 
         /**
-         * Checks if the function can contain one more element
-         */
-        void checkSize();
-
-        /**
          * Clear the spline
          */
         void clear();
@@ -47,6 +38,11 @@ class Function
          * Load a JSON file
          */
         static std::map<std::string, Function> fromFile(std::string filename);
+
+        /**
+         * Write a JSON file
+         */
+        static void toFile(std::map<std::string, Function> &splines, std::string filename);
 
     protected:
         /**
