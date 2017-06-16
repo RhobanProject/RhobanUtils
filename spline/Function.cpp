@@ -48,6 +48,28 @@ std::map<std::string, Function> Function::fromFile(std::string filename)
                 result[name] = f;
             }
         }
+	else
+	  if (json.isArray()) {	  
+	    for (unsigned int k=0; k<json.size(); k++) {
+	      auto entry = json[k];
+	      if (entry.isObject()){
+		std::map<std::string,double> settings;
+		for (auto name : entry.getMemberNames()) {
+		  auto value = entry[name];
+		  settings[name]=value.asDouble();
+		}
+		double time=settings["time"]; 
+		for(auto v : settings){
+		  if (v.first!="time"){
+		    if (result.find(v.first)==result.end()){
+		      result[v.first]=Function();
+		    }
+		    result[v.first].addPoint(time,v.second);
+		  }
+		}
+	      }
+	    }
+	  }
     }
 
     return result;
