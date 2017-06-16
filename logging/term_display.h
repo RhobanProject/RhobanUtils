@@ -70,7 +70,7 @@ void ClearScreen();
 void term_set_color(const char * c, char * out = NULL);
 
 #ifndef WIN32
-#define TERM_COLOR(c...) {term_set_color(c);}
+#define TERM_COLOR(c) {term_set_color(c);}
 #else
 #define TERM_COLOR(c,...) {term_set_color(c,__VA_ARGS__);}
 #endif

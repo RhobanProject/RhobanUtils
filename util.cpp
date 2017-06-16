@@ -266,3 +266,35 @@ string today()
 	strftime(result, 80, "%Y_%m_%d", ttt);
 	return string(result);
 }
+
+std::string file_get_contents(std::string path)
+{
+    std::ifstream ifs(path.c_str());
+    std::string content((std::istreambuf_iterator<char>(ifs)),
+            (std::istreambuf_iterator<char>()));
+    return content;
+}
+
+void file_put_contents(std::string path, std::string contents)
+{
+    std::ofstream ofile(path.c_str());
+
+    if (ofile) {
+        ofile << contents;
+        ofile.close();
+    }   
+}
+
+void replaceAll(std::string& str, const std::string& from, const std::string& to) {
+    if(from.empty())
+        return;
+    size_t start_pos = 0;
+    while((start_pos = str.find(from, start_pos)) != std::string::npos) {
+        str.replace(start_pos, from.length(), to);
+        start_pos += to.length(); // In case 'to' contains 'from', like replacing 'x' with 'yx'
+    }
+}
+
+bool strContains(const std::string &str, const std::string &other) {
+    return str.find(other) != std::string::npos;
+}

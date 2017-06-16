@@ -72,4 +72,7 @@ double tan(const Angle & a);
 double deg2rad(double degreeAngle);
 double rad2deg(double radAngle);
 
+/// return the normalized angle in [-pi,pi] from radAngle
+double normalizeRad(double radAngle);
+
 #endif//ANGLE_HPP

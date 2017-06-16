@@ -2,6 +2,7 @@
 #include <cstdlib>
 #include <cstdio>
 #include <json/json.h>
+#include <util.h>
 #include "Function.h"
 
 Function::Function()
@@ -15,14 +16,6 @@ void Function::clear()
     points_y.clear();
     ds.clear();
     nbPoints = 0;
-}
-
-static std::string file_get_contents(std::string path)
-{
-    std::ifstream ifs(path.c_str());
-    std::string content((std::istreambuf_iterator<char>(ifs)),
-            (std::istreambuf_iterator<char>()));
-    return content;
 }
 
 std::map<std::string, Function> Function::fromFile(std::string filename)
@@ -73,6 +66,28 @@ std::map<std::string, Function> Function::fromFile(std::string filename)
     }
 
     return result;
+}
+        
+void Function::toFile(std::map<std::string, Function> &splines, std::string filename)
+{
+    Json::Value json(Json::objectValue);
+    Json::StyledWriter writer;
+
+    for (auto &entry : splines) {
+        auto &key = entry.first;
+        auto &spline = entry.second;
+        json[key] = Json::Value(Json::arrayValue);
+        for (int k=0; k<spline.nbPoints; k++) {
+            Json::Value pt(Json::arrayValue);
+            pt[0] = spline.points_x[k];
+            pt[1] = spline.points_y[k];
+            json[key][k] = pt;
+        }
+    }
+
+    std::string data;
+    data = writer.write(json);
+    file_put_contents(filename, data);
 }
 
 double Function::getXMax()

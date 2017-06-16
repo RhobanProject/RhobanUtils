@@ -8,7 +8,6 @@
 #include "Observation.hpp"
 
 #include "random/tools.h"
-#include "timing/Benchmark.hpp"
 
 // A real ParticleFilter concerns one particle type
 // P must be a Particle Type
@@ -243,47 +242,50 @@ class ParticleFilter {
                       double elapsedTime)
     {
 
-        Utils::Timing::Benchmark::open("Mutation");
         mutate(ctrl, elapsedTime);
-        Utils::Timing::Benchmark::close("Mutation");
 
 
         //We only select if we have new observations
         if(observations.size()>0)
         {
-            Utils::Timing::Benchmark::open("Applying observations");
-            /*
-              double sum = 0.0;
-              for (int i=0; i<(int) particles.size(); i++) {
-              sum += particles[i].second;
-              }
-            */
-
             for (auto& o : observations)
             {
                 apply(*o);
             }
-            /*
-              sum = 0.0;
-              for (int i=0; i<(int) particles.size(); i++) {
-              sum += particles[i].second;
-              }
-            */
-
-            Utils::Timing::Benchmark::close("Applying observations");
-
-            Utils::Timing::Benchmark::open("Selecting particles");
             select();
-            Utils::Timing::Benchmark::close("Selecting particles");
         }
-
-        Utils::Timing::Benchmark::open("Updating internal state");
         updateInternalValues();
-        Utils::Timing::Benchmark::close("Updating internal state");
     }
 
     unsigned int nbParticles() const{
         return particles.size();
+    }
+
+    /// Sample a subset of particles from the whole set
+    /// if new_nb_particles is equivalent to current number of particles: do Nothing
+    void resize(size_t new_nb_particles) {
+      // If number of particles is equivalent, do not change
+      if (new_nb_particles == nbParticles()) return;
+      // If the number of particles has been reduced, choose distinct particles
+      if (new_nb_particles < nbParticles()) {
+        std::vector<size_t> particles_index;
+        particles_index = getKDistinctFromN(new_nb_particles, particles.size(), &engine);
+        std::vector<std::pair<P,double>> new_particles;
+        new_particles.reserve(new_nb_particles);
+        for (size_t id : particles_index) {
+          new_particles.push_back(particles[id]);
+        }
+        particles = new_particles;
+      }
+      // If the number is higher, create new particles to complete
+      else {
+        size_t missing_particles = new_nb_particles - nbParticles();
+        std::uniform_int_distribution<int> id_distribution(0, (int)nbParticles());
+        for (size_t new_id = 0; new_id < missing_particles; new_id++) {
+          int id = id_distribution(engine);
+          particles.push_back(particles[id]);
+        }
+      }
     }
 
     P getParticle(unsigned int index) const{

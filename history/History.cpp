@@ -3,7 +3,7 @@
 History::History(double window) : 
     _mutex(),
     _isLogging(false),
-    _startLoggingTime(0.0),
+    _startLoggingTime(-1.0),
     _windowSize(window),
     _values()
 {
@@ -55,6 +55,11 @@ void History::pushValue(double timestamp, double value)
         (_values.back().first - _values.front().first > _windowSize)
     ) {
         _values.pop_front();
+    }
+    //Set the startLoggingTime to the first
+    //data timestampt pushed after startLogging() is called
+    if (_isLogging && _startLoggingTime < 0.0) {
+        _startLoggingTime = timestamp;
     }
     //Unlock
     _mutex.unlock();
@@ -111,9 +116,7 @@ void History::startLogging()
 {
     _mutex.lock();
     _isLogging = true;
-    if (_values.size() > 0) {
-        _startLoggingTime = _values.back().first;
-    }
+    _startLoggingTime = -1.0;
     _mutex.unlock();
 }
 
@@ -124,19 +127,24 @@ void History::stopLogging(std::ostream& os, bool binary)
     if (!binary) {
         for (const auto& it : _values) {
             //Skip data in buffer before logging start
-            if (it.first >= _startLoggingTime) {
-                //Write data
+            if (
+                _startLoggingTime > 0.0 && 
+                it.first >= _startLoggingTime
+            ) {
+                //Write ascii data
                 os 
                     <<  std::setprecision(15) << it.first << " " 
                     <<  std::setprecision(15) << it.second << std::endl;
             }
         }
     } else {
+        // When writing in binary, use all values
         size_t size = _values.size();
         os.write((const char*)&size, sizeof(size_t));
         for (const auto& it : _values) {
-            os.write((const char*)&(it.first), sizeof(double)); 
-            os.write((const char*)&(it.second), sizeof(double)); 
+            //Write binary data
+            os.write((const char*)&(it.first), sizeof(double));
+            os.write((const char*)&(it.second), sizeof(double));
         }
     }
     _mutex.unlock();
@@ -151,9 +159,7 @@ void History::loadReplay(
     //Read the number of data
     size_t size = 0;
     if (binary) {
-        char buffer[10];
-        is.read(buffer, sizeof(size_t));
-        size = *((size_t*)(&buffer));
+        is.read((char*)&size, sizeof(size_t));
     }
     //Read the input stream
     while (true) {
@@ -165,12 +171,8 @@ void History::loadReplay(
                 _mutex.unlock();
                 return;
             }
-            char buffer1[10];
-            char buffer2[10];
-            is.read(buffer1, sizeof(double));
-            is.read(buffer2, sizeof(double));
-            timestamp = *((double*)(&buffer1));
-            value = *((double*)(&buffer2));
+            is.read((char*)&timestamp, sizeof(double));
+            is.read((char*)&value, sizeof(double));
             size--;
         } else {
             while (is.peek() == ' ' || is.peek() == '\n') {
@@ -186,8 +188,8 @@ void History::loadReplay(
         timestamp += timeShift;
         //Check that timestamp is increasing
         if (_values.size() > 0 && timestamp <= _values.back().first) {
-            _mutex.unlock();
-            throw std::logic_error("History invalid timestamp");
+           _mutex.unlock();
+           throw std::runtime_error("History invalid timestamp");
         }
         //Insert the value
         _values.push_back(std::pair<double, double>(timestamp, value));

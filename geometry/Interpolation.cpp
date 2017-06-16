@@ -73,7 +73,7 @@ std::pair<unsigned long long, double> leastSquareLine(std::list<unsigned long lo
 	}
 	// Special case : line should be vertical
 	if (n * sum_x2 == sum_x * sum_x) {
-		double x = sqrt(sum_x2);
+		//double x = sqrt(sum_x2);//LH: Commented because line wasn't used
 		return result;
 	}
 //	cout << n * sum_xy - sum_x * sum_y - (n * sum_x2 - sum_x * sum_x) << " " << n * sum_x2 - sum_x * sum_x << endl;

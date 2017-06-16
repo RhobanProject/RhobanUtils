@@ -3,7 +3,16 @@
 #include <stdexcept>
 #include <iostream>
 #include "Nominal.h"
-#include <boost/math/distributions/chi_squared.hpp>
+// #include <boost/math/distributions/chi_squared.hpp>
+
+double chi2_cdf(double x, double k)
+{
+    return sqrt(x);
+    /*
+    boost::math::chi_squared mydist(k);
+    return boost::math::cdf(mydist, x);
+    */
+}
 
 Json::Value eigenToJson(Eigen::VectorXd e)
 {
@@ -54,12 +63,6 @@ Eigen::MatrixXd jsonToEigenMatrix(Json::Value v)
     }
 
     return m;
-}
-
-double chi2_cdf(double x, double k)
-{
-    boost::math::chi_squared mydist(k);
-    return boost::math::cdf(mydist, x);
 }
 
 void Nominal::Bin::add(Eigen::VectorXd v)
@@ -134,14 +137,12 @@ double Nominal::Bin::score(Eigen::VectorXd v)
 
 double Nominal::guessT(Eigen::VectorXd v)
 {
-    bool hasBest = false;
-    double bestScore;
+    double bestScore = std::numeric_limits<double>::max();
     double t = 0;
 
     for (auto bin : bins) {
         double score = bin.second.chi2(v);
-        if (!hasBest || score < bestScore) {
-            hasBest = true;
+        if (score < bestScore) {
             t = bin.first/(double)nbins;
             bestScore = score;
         }
@@ -166,7 +167,6 @@ void Nominal::saveToJson(std::string filename)
     for (auto entry : bins) {
         auto bin = entry.second;
         Json::Value b(Json::arrayValue);
-        int m = 0;
         b[0] = eigenToJson(bin.mean);
         b[1] = eigenToJson(bin.cov);
         b[2] = eigenToJson(bin.icov);

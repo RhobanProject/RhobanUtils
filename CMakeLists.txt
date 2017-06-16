@@ -31,13 +31,13 @@ set(SOURCES_DIRECTORIES
   history
   threading
   trajectory
-  nominal
+#  nominal #'tmp' removal of nominal due to a dependency to boost
   random
 )
 
 #Include Sources sub sources
 foreach (DIRECTORY ${SOURCES_DIRECTORIES})
-    message("-- Sources: Adding ${DIRECTORY}/")
+    message(STATUS "-- Sources: Adding ${DIRECTORY}/")
     include (${DIRECTORY}/Sources.cmake)
     set (PREFIXED_SOURCES)
     foreach (SOURCE ${SOURCES})
