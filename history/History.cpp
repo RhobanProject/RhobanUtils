@@ -9,6 +9,11 @@ History::History(double window) :
 {
 }
 
+void History::setWindowSize(double window)
+{
+    _windowSize = window;
+}
+
 size_t History::size() const
 {
     return _values.size();

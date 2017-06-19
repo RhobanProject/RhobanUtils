@@ -25,6 +25,11 @@ class History
         History(double window = 2.0);
 
         /**
+         * Sets the history window size
+         */
+        void setWindowSize(double window);
+
+        /**
          * Return the number of internal stored data
          */
         size_t size() const;
