@@ -15,7 +15,13 @@ void ObstacleAvoider::addObstacle(Point center, double radius)
 
 typedef std::pair<Graph::Node, Graph::Node> NodePair;
 
-std::vector<Point> ObstacleAvoider::findPath(Point start, Point goal, double accuracy, double *score)
+std::vector<Point> ObstacleAvoider::findPath(
+        Point start, 
+        Point goal, 
+        double accuracy, 
+        double *score,
+        std::function<bool(Point)> filter
+        )
 {
     Graph graph;
     std::map<Graph::Node, Point> nodePositions;
@@ -24,8 +30,6 @@ std::vector<Point> ObstacleAvoider::findPath(Point start, Point goal, double acc
     // Start and goal nodes
     nodePositions[0] = start;
     nodePositions[1] = goal;
-    graph.add(0);
-    graph.add(1);
 
     // Adding circle nodes
     size_t count = 2;
@@ -42,7 +46,6 @@ std::vector<Point> ObstacleAvoider::findPath(Point start, Point goal, double acc
             double x = obstacle.getCenter().x + cos(k*2*M_PI/steps) * (obstacle.getRadius()*1.01);
             double y = obstacle.getCenter().y + sin(k*2*M_PI/steps) * (obstacle.getRadius()*1.01);
             Point point(x, y);
-            graph.add(count);
             nodePositions[count] = point;
 
             // Connecting sequential points
@@ -56,6 +59,12 @@ std::vector<Point> ObstacleAvoider::findPath(Point start, Point goal, double acc
         // Closing the circle
         ignoreCollisions[NodePair(first, count-1)] = oId;
         oId++;
+    }
+
+    for (auto &entry : nodePositions) {
+        if (filter(entry.second)) {
+            graph.add(entry.first);
+        }
     }
     
     // Connecting the nodes, if no intersection
