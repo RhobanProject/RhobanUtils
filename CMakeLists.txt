@@ -11,6 +11,8 @@ catkin_package(
   CATKIN_DEPENDS jsoncpp model
 )
 
+option (RHOBANUTILS_BUILD_APPS "Build Rhoban utils apps" OFF)
+
 include_directories(. ${catkin_INCLUDE_DIRS})
 
 #Enable C++11
@@ -31,6 +33,7 @@ set(SOURCES_DIRECTORIES
   history
   threading
   trajectory
+  astar
 #  nominal #'tmp' removal of nominal due to a dependency to boost
   random
 )
@@ -48,3 +51,9 @@ endforeach (DIRECTORY)
 
 add_library (RhobanUtils ${ALL_SOURCES})
 target_link_libraries(RhobanUtils ${catkin_LIBRARIES})
+
+if (RHOBANUTILS_BUILD_APPS)
+    add_executable (astarTest astar/main.cpp)
+    target_link_libraries (astarTest RhobanUtils)
+endif ()
+
