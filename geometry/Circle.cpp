@@ -24,6 +24,11 @@ Angle Circle::getTheta(const Point & p) const{
 Point Circle::getPoint(Angle theta) const{
   return center + Point::mkPointFromPolar(radius, theta);
 }
+  
+bool Circle::contains(const Point &p) const
+{
+    return (p-center).getLength() <= radius;
+}
 
 void Circle::translate(const Point & delta)
 {

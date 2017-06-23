@@ -34,6 +34,7 @@ set(SOURCES_DIRECTORIES
   threading
   trajectory
   astar
+  graph
 #  nominal #'tmp' removal of nominal due to a dependency to boost
   random
 )
@@ -55,5 +56,8 @@ target_link_libraries(RhobanUtils ${catkin_LIBRARIES})
 if (RHOBANUTILS_BUILD_APPS)
     add_executable (astarTest astar/main.cpp)
     target_link_libraries (astarTest RhobanUtils)
+    
+    add_executable (graphTest graph/main.cpp)
+    target_link_libraries (graphTest RhobanUtils)
 endif ()
 

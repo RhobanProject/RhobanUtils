@@ -31,6 +31,11 @@ public:
   Angle getTheta(const Point & p) const;
 
   /**
+   * Does this circle contains the point p ?
+   */
+  bool contains(const Point &p) const;
+
+  /**
    * Move the given circle of delta
    */
   void translate(const Point & delta);

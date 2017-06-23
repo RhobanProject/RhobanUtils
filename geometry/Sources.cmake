@@ -6,4 +6,5 @@ set(SOURCES
   Interpolation.cpp
   ParametricLine.cpp
   PLCluster.cpp
+  Segment.cpp
   )

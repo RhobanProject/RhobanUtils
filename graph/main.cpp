@@ -52,7 +52,7 @@ int main()
     // testCirlceIntersection();
 
     ObstacleAvoider oa;
-    oa.addObstacle(Point(0, 0), 100);
+    oa.addObstacle(Point(0, 0), 125);
 
     oa.findPath(Point(-70.348, 103.414), Point(200, 0));
 }

@@ -6,7 +6,7 @@
 #include "Graph.hpp"
 #include "ObstacleAvoider.hpp"
 
-#define DEBUG
+// #define DEBUG
 
 void ObstacleAvoider::addObstacle(Point center, double radius)
 {
@@ -15,15 +15,11 @@ void ObstacleAvoider::addObstacle(Point center, double radius)
 
 typedef std::pair<Graph::Node, Graph::Node> NodePair;
 
-std::vector<Point> ObstacleAvoider::findPath(Point start, Point goal, int accuracy, double *score)
+std::vector<Point> ObstacleAvoider::findPath(Point start, Point goal, double accuracy, double *score)
 {
     Graph graph;
     std::map<Graph::Node, Point> nodePositions;
     std::map<NodePair, size_t> ignoreCollisions;
-
-    // We are already in an obstacle, enabling the inside-edges with
-    // lower scores
-    bool getOut = false;
 
     // Start and goal nodes
     nodePositions[0] = start;
@@ -35,16 +31,16 @@ std::vector<Point> ObstacleAvoider::findPath(Point start, Point goal, int accura
     size_t count = 2;
     size_t oId = 0;
     for (auto &obstacle : obstacles) {
-        auto zone = Circle(obstacle.getCenter(), obstacle.getRadius()+margin*1.01);
-        if (zone.contains(start) || zone.contains(goal)) {
-            getOut = true;
-        }
-
         Graph::Node first;
-        for (int k=0; k<accuracy; k++) {
+
+        double perimeter = 2*M_PI*obstacle.getRadius();
+        size_t steps = round(perimeter/accuracy);
+        if (steps < 8) steps = 8;
+
+        for (int k=0; k<steps; k++) {
             // XXX: Parametrize the margin
-            double x = obstacle.getCenter().x + cos(k*2*M_PI/accuracy) * (obstacle.getRadius()+margin);
-            double y = obstacle.getCenter().y + sin(k*2*M_PI/accuracy) * (obstacle.getRadius()+margin);
+            double x = obstacle.getCenter().x + cos(k*2*M_PI/steps) * (obstacle.getRadius()*1.01);
+            double y = obstacle.getCenter().y + sin(k*2*M_PI/steps) * (obstacle.getRadius()*1.01);
             Point point(x, y);
             graph.add(count);
             nodePositions[count] = point;
@@ -74,18 +70,13 @@ std::vector<Point> ObstacleAvoider::findPath(Point start, Point goal, int accura
 
                 size_t oId = 0;
                 for (auto &obstacle : obstacles) {
-                    auto zone = Circle(obstacle.getCenter(), obstacle.getRadius()+margin*0.99);
                     auto p = NodePair(node1, node2);
                     bool startOrGoal = (node1 == 0 || node1 == 1);
 
                     if (!ignoreCollisions.count(p) || ignoreCollisions[p] != oId) {
-                        if (segment.intersects(zone)) {
-                            if (startOrGoal && getOut) {
-                                if (segment.intersects(obstacle)) {
-                                    score *= 1000;
-                                } else {
-                                    score *= 10;
-                                }
+                        if (segment.intersects(obstacle)) {
+                            if (startOrGoal) {
+                                score *= 1000;
                             } else {
                                 ok = false;
                             }
@@ -129,7 +120,7 @@ std::vector<Point> ObstacleAvoider::findPath(Point start, Point goal, int accura
         Point last = path[0];
         prunedPath.push_back(last);
         for (size_t k = 1; k<path.size(); k++) {
-            if (k == path.size()-1 || (path[k]-last).getLength() > 2*margin) {
+            if (k == path.size()-1 || (path[k]-last).getLength() > accuracy*0.75) {
                 last = path[k];
                 prunedPath.push_back(last);
             }
@@ -137,7 +128,6 @@ std::vector<Point> ObstacleAvoider::findPath(Point start, Point goal, int accura
         path = prunedPath;
     } else {
         std::cout << "PATH FIND ERROR!" << std::endl;
-        std::cout << getOut << std::endl;
         std::cout << start.x << " " << start.y << std::endl;
         std::cout << goal.x << " " << goal.y << std::endl;
         std::cout << obstacles[0].getCenter().x << " " << obstacles[0].getCenter().y << " "
