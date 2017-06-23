@@ -45,7 +45,8 @@ class AStar
                 Pos start, 
                 Pos goal,
                 std::function<bool(Pos)> reachable,
-                size_t maxIter = 0
+                size_t maxIter = 0,
+                double *score = NULL
                 );
         
         static std::vector<Point> solveCont(
@@ -53,6 +54,7 @@ class AStar
                 Point goal,
                 std::function<bool(Point)> reachable,
                 double step,
-                size_t maxIter = 0
+                size_t maxIter = 0,
+                double *score = NULL
                 );
 };

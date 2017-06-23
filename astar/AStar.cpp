@@ -23,7 +23,8 @@ std::vector<AStar::Pos> AStar::solve(
         Pos start, 
         Pos goal,
         std::function<bool(Pos)> reachable,
-        size_t maxIter
+        size_t maxIter,
+        double *score
         )
 {
     // Boxes
@@ -103,6 +104,9 @@ std::vector<AStar::Pos> AStar::solve(
     std::vector<Pos> result;
     if (ok) {
         auto box = boxes[goal];
+        if (score != NULL) {
+            *score = box.score;
+        }
 
         do {
             result.push_back(box.pos);
@@ -130,7 +134,8 @@ std::vector<Point> AStar::solveCont(
         Point goal,
         std::function<bool(Point)> reachable,
         double step,
-        size_t maxIter
+        size_t maxIter,
+        double *score
         )
 {
     auto resultPos = AStar::solve(
@@ -139,7 +144,8 @@ std::vector<Point> AStar::solveCont(
             [&reachable, &step](AStar::Pos pos) -> bool {
                 return reachable(posToPoint(pos, step));
             },
-            maxIter);
+            maxIter,
+            score);
 
     std::vector<Point> result;
     for (auto &pos : resultPos) {
