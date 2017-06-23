@@ -138,6 +138,7 @@ std::vector<Point> AStar::solveCont(
         double *score
         )
 {
+    double scoreTmp;
     auto resultPos = AStar::solve(
             pointToPos(start, step),
             pointToPos(goal, step),
@@ -145,8 +146,11 @@ std::vector<Point> AStar::solveCont(
                 return reachable(posToPoint(pos, step));
             },
             maxIter,
-            score);
+            &scoreTmp);
 
+    if (score != NULL) {
+        *score = scoreTmp*step;
+    }
     std::vector<Point> result;
     for (auto &pos : resultPos) {
         result.push_back(posToPoint(pos, step));
