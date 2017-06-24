@@ -6,7 +6,7 @@
 #include "Graph.hpp"
 #include "ObstacleAvoider.hpp"
 
-// #define DEBUG
+#define DEBUG
 
 void ObstacleAvoider::addObstacle(Point center, double radius)
 {
@@ -24,16 +24,23 @@ std::vector<Point> ObstacleAvoider::findPath(
         )
 {
     Graph graph;
+
+    // Position of the nodes from the graph
     std::map<Graph::Node, Point> nodePositions;
+
+    // Avoid intersection checks between nodes from a circle
     std::map<NodePair, size_t> ignoreCollisions;
+    std::map<Graph::Node, size_t> nodeObstacle;
 
     // Start and goal nodes
     nodePositions[0] = start;
     nodePositions[1] = goal;
+    nodeObstacle[0] = 0;
+    nodeObstacle[1] = 0;
 
     // Adding circle nodes
     size_t count = 2;
-    size_t oId = 0;
+    size_t oId = 1;
     for (auto &obstacle : obstacles) {
         Graph::Node first;
 
@@ -47,6 +54,7 @@ std::vector<Point> ObstacleAvoider::findPath(
             double y = obstacle.getCenter().y + sin(k*2*M_PI/steps) * (obstacle.getRadius()*1.01);
             Point point(x, y);
             nodePositions[count] = point;
+            nodeObstacle[count] = oId;
 
             // Connecting sequential points
             if (k > 0) {
@@ -77,13 +85,14 @@ std::vector<Point> ObstacleAvoider::findPath(
                 bool ok = true;
                 double score = segment.getLength();
 
-                size_t oId = 0;
+                size_t oId = 1;
                 for (auto &obstacle : obstacles) {
                     auto p = NodePair(node1, node2);
                     bool startOrGoal = (node1 == 0 || node1 == 1);
 
                     if (!ignoreCollisions.count(p) || ignoreCollisions[p] != oId) {
-                        if (segment.intersects(obstacle)) {
+                        if ((nodeObstacle[node1] && nodeObstacle[node1] == nodeObstacle[node2]) 
+                                || segment.intersects(obstacle)) {
                             if (startOrGoal) {
                                 score *= 1000;
                             } else {
