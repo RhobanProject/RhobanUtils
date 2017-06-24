@@ -6,7 +6,7 @@
 #include "Graph.hpp"
 #include "ObstacleAvoider.hpp"
 
-#define DEBUG
+// #define DEBUG
 
 void ObstacleAvoider::addObstacle(Point center, double radius)
 {
