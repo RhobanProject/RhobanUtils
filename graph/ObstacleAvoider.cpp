@@ -91,10 +91,12 @@ std::vector<Point> ObstacleAvoider::findPath(
                     bool startOrGoal = (node1 == 0 || node1 == 1);
 
                     if (!ignoreCollisions.count(p) || ignoreCollisions[p] != oId) {
-                        if ((nodeObstacle[node1] && nodeObstacle[node1] == nodeObstacle[node2]) 
-                                || segment.intersects(obstacle)) {
+                        if ((nodeObstacle[node1] == oId && nodeObstacle[node2] == oId)
+                                ||
+                                segment.intersects(obstacle)
+                                ) {
                             if (startOrGoal) {
-                                score *= 1000;
+                                score *= 5;
                             } else {
                                 ok = false;
                             }
