@@ -48,7 +48,7 @@ std::vector<Point> ObstacleAvoider::findPath(
         size_t steps = round(perimeter/accuracy);
         if (steps < 8) steps = 8;
 
-        for (int k=0; k<steps; k++) {
+        for (size_t k=0; k<steps; k++) {
             // XXX: Parametrize the margin
             double x = obstacle.getCenter().x + cos(k*2*M_PI/steps) * (obstacle.getRadius()*1.01);
             double y = obstacle.getCenter().y + sin(k*2*M_PI/steps) * (obstacle.getRadius()*1.01);
