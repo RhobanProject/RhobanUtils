@@ -56,6 +56,12 @@ void UDPBroadcast::openRead()
     int opt = 1;
     int error = setsockopt(_readFd, SOL_SOCKET, 
         SO_BROADCAST, (const char *)&opt, sizeof(opt));
+
+    if (error != -1) {
+        error = setsockopt(_readFd, SOL_SOCKET, 
+        SO_REUSEPORT, (const char *)&opt, sizeof(opt));
+    }
+
     if (error == -1) {
         std::cout << 
             "ERROR: UDPBroadcast: Unable to configure read socket" << std::endl;
