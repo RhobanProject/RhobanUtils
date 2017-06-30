@@ -22,7 +22,12 @@ std::map<std::string, Function> Function::fromFile(std::string filename)
 {
     auto data = file_get_contents(filename);
     Json::Value json;
-    Json::Reader reader;
+    auto f=Json::Features::all();
+    f.allowComments_=true;
+    f.strictRoot_=false;
+    f.allowDroppedNullPlaceholders_=true;
+    f.allowNumericKeys_=true;
+    Json::Reader reader(f);
     std::map<std::string, Function> result;
 
     if (reader.parse(data, json)) {
@@ -42,7 +47,8 @@ std::map<std::string, Function> Function::fromFile(std::string filename)
             }
         }
 	else
-	  if (json.isArray()) {	  
+	  if (json.isArray()) {
+	    //fprintf(stderr,"START loading time based json file\n");
 	    for (unsigned int k=0; k<json.size(); k++) {
 	      auto entry = json[k];
 	      if (entry.isObject()){
@@ -50,21 +56,33 @@ std::map<std::string, Function> Function::fromFile(std::string filename)
 		for (auto name : entry.getMemberNames()) {
 		  auto value = entry[name];
 		  settings[name]=value.asDouble();
+		  //fprintf(stderr,"\t building settings: %s =>  %lf \n",name.c_str(),settings[name]);
 		}
-		double time=settings["time"]; 
+		double time=settings["time"];
+		//fprintf(stderr,"\ttime is %lf \n",time);
 		for(auto v : settings){
 		  if (v.first!="time"){
 		    if (result.find(v.first)==result.end()){
 		      result[v.first]=Function();
 		    }
 		    result[v.first].addPoint(time,v.second);
+		    //fprintf(stderr,"\tadd entry for %s : %lf = %lf \n",v.first.c_str(),time,v.second);
 		  }
 		}
 	      }
 	    }
+	    //fprintf(stderr,"END loading time based json file\n");
 	  }
     }
 
+    //for(auto e : result){
+    //fprintf(stderr,"entries for %s : \n",e.first.c_str());
+    //for(int i=0;i<e.second.points_x.size();++i){
+    //fprintf(stderr,"\t%lf => %lf\n",e.second.points_x[i],e.second.points_y[i]);
+    //}
+    //}
+    
+    
     return result;
 }
         
@@ -113,7 +131,7 @@ void Function::addPoint(double x, double y)
     nbPoints++;
 }
 
-double Function::get(double x)
+double Function::get(double x,double smooth)
 { 
     if (nbPoints == 0) {
         return 0.0;
@@ -146,7 +164,22 @@ double Function::get(double x)
         }
     }
 
-    return points_y[i-1]+ds[i-1]*(x-points_x[i-1]);
+    if (smooth<=0.0)
+      return points_y[i-1]+ds[i-1]*(x-points_x[i-1]);
+
+    // x is between points_x[i-1] and points_x[i]
+    double linear = points_y[i-1]+ds[i-1]*(x-points_x[i-1]);
+    double left=x-points_x[i-1];
+    double right=points_x[i]-x;
+    if ((right<smooth) and (right<left)) {
+      double d=(points_x[i]-x) / smooth;
+      return (1-d)*points_y[i] + d*linear;
+    }
+    if (left<smooth){
+      double d=(x-points_x[i-1]) / smooth;
+      return (1-d)*points_y[i-1] + d*linear;
+    }
+    return linear;    
 }
 
 double Function::getMod(double x)
