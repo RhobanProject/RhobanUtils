@@ -22,7 +22,7 @@ class Function
         /**
          * Get the value for the given x
          */
-        double get(double x);
+        double get(double x,double smooth=-1.0);
 
         /**
          * Gets the value for the given x, modulo the size of the function
