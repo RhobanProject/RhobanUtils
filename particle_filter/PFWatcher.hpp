@@ -7,13 +7,6 @@
 #include <deque>
 #include <vector>
 
-// Previous declaration
-namespace Vision {
-    namespace Utils {
-        class CameraState;
-    }
-}
-
 template<class T>
 class PFWatcher {
 public:
