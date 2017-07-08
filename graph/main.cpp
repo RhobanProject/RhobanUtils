@@ -46,15 +46,46 @@ void testCircleIntersection()
     std::cerr << s.intersects(c) << std::endl;
 }
 
-int main()
+void testObstacleAvoider()
 {
-    // testDjikstra();
-    // testCirlceIntersection();
-
     ObstacleAvoider oa;
     oa.addObstacle(Point(0, 0), 100);
     oa.addObstacle(Point(-1.5, -150), 100);
 
     oa.findPath(Point(-200, 0), Point(200, 0));
+}
+
+void testCircleTangents()
+{
+    Circle c(3, 4, 0.5);
+
+    for (double a=0; a<M_PI*2; a+=0.1) {
+        auto A = c.getCenter();
+        A.x += cos(a)*c.getRadius();
+        A.y += sin(a)*c.getRadius();
+        auto B = c.getCenter();
+        B.x += cos(a+0.1)*c.getRadius();
+        B.y += sin(a+0.1)*c.getRadius();
+        std::cout << A.x << " " << A.y << std::endl;
+        std::cout << B.x << " " << B.y << std::endl;
+        std::cout << std::endl << std::endl;
+    }
+
+    Point p(2, 10);
+    auto tangents = c.tangents(p);
+
+    for (auto &t : tangents) {
+        std::cout << p.x << " " << p.y << std::endl;
+        std::cout << t.x << " " << t.y << std::endl;
+        std::cout << std::endl << std::endl;
+    }
+}
+
+int main()
+{
+    // testDjikstra();
+    // testCirlceIntersection();
+    // testObstacleAvoider();
+    testCircleTangents();
 }
 
