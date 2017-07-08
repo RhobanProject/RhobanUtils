@@ -115,7 +115,27 @@ Point Circle::projectPoint(const Point & p) const{
   return center + diff;
 }
 
+std::vector<Point> Circle::tangents(const Point &p)
+{
+    std::vector<Point> result;
+    Point vect = p - center;
+    double dist = vect.getLength();
+
+    if (dist > radius) {
+        double alpha = acos(radius / dist);
+        Angle rot(rad2deg(alpha));
+        auto a = center + vect.rotation(rot).normalize(radius);
+        auto b = center + vect.rotation(-rot).normalize(radius);
+
+        result.push_back(a);
+        result.push_back(b);
+    }
+
+    return result;
+}
+
 ostream & operator<<(ostream & out, const Circle & c){
   out << '{' << c.getRadius() << ',' << c.getCenter() << '}';
   return out;
 }
+  

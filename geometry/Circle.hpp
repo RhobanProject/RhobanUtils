@@ -65,6 +65,13 @@ public:
                                 const Point & p3);
 
   Point projectPoint(const Point & p) const;
+
+  /**
+   * Compute the tangents to one circle that pass to the point p
+   * There will be usually two results, except if the point is inside
+   * the circle where there is none
+   */
+  std::vector<Point>tangents(const Point &p);
 };
 
 std::ostream & operator<<(std::ostream & out, const Circle & c);
