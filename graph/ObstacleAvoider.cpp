@@ -70,7 +70,7 @@ std::vector<Point> ObstacleAvoider::findPath(
     }
 
     for (auto &entry : nodePositions) {
-        if (filter(entry.second)) {
+        if (entry.first == 0 || entry.first == 1 || filter(entry.second)) {
             graph.add(entry.first);
         }
     }
