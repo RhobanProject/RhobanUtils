@@ -35,7 +35,7 @@ set(SOURCES_DIRECTORIES
   trajectory
   astar
   graph
-#  nominal #'tmp' removal of nominal due to a dependency to boost
+  nominal
   random
 )
 
