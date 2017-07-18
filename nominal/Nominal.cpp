@@ -101,9 +101,8 @@ void Nominal::Bin::compile(int dimensions)
 
     // Adding epsilon random to be sure the matrix is numerically inversible
     Eigen::MatrixXd epsilon = Eigen::MatrixXd::Random(cov.rows(), cov.cols());
-    cov += epsilon*1e-
+    cov += epsilon*1e-6;
 
-      >>>>>>> e97823bd1aa0865f425d09631fe7b6c99f77779b
     icov = cov.inverse();
 }
 
