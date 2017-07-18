@@ -72,6 +72,10 @@ void Nominal::Bin::add(Eigen::VectorXd v)
 
 void Nominal::Bin::compile(int dimensions)
 {
+    if (values.size() == 0) {
+        throw std::logic_error("A nominal bin is empty");
+    }
+
     // Updating mean
     mean = Eigen::VectorXd(dimensions);
     for (int k=0; k<dimensions; k++) {
