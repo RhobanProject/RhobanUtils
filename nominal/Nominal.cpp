@@ -72,7 +72,7 @@ void Nominal::Bin::add(Eigen::VectorXd v)
 
 void Nominal::Bin::compile(int dimensions)
 {
-    if (values.size() == 0) {
+    if (values.size() <= 1) {
         throw std::logic_error("A nominal bin is empty");
     }
 
