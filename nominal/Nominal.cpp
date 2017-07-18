@@ -98,6 +98,9 @@ void Nominal::Bin::compile(int dimensions)
         cov = cov + d*d.transpose();
     }
     cov = cov/((double)(values.size()-1));
+    std::cout << cov << std::endl;
+    fflush(stdout);
+    
     icov = cov.inverse();
 }
 
@@ -158,7 +161,9 @@ double Nominal::guessT(Eigen::VectorXd v)
 void Nominal::compile()
 {
     for (auto &entry : bins) {
-        entry.second.compile(dimensions);
+      std::cout << "BIN " << entry.first << " : " << entry.second.values.size() << std::endl;
+      fflush(stdout);
+      entry.second.compile(dimensions);
     }
 }
 
