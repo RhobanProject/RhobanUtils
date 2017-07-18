@@ -98,9 +98,12 @@ void Nominal::Bin::compile(int dimensions)
         cov = cov + d*d.transpose();
     }
     cov = cov/((double)(values.size()-1));
-    std::cout << cov << std::endl;
-    fflush(stdout);
-    
+
+    // Adding epsilon random to be sure the matrix is numerically inversible
+    Eigen::MatrixXd epsilon = Eigen::MatrixXd::Random(cov.rows(), cov.cols());
+    cov += epsilon*1e-
+
+      >>>>>>> e97823bd1aa0865f425d09631fe7b6c99f77779b
     icov = cov.inverse();
 }
 
