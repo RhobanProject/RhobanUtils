@@ -8,6 +8,7 @@
  * http://creativecommons.org/licenses/by-nc-sa/3.0
  *************************************************/
 
+#include <sys/stat.h>
 #include <iostream>
 #include <fstream>
 #include <cstring>
@@ -298,3 +299,9 @@ void replaceAll(std::string& str, const std::string& from, const std::string& to
 bool strContains(const std::string &str, const std::string &other) {
     return str.find(other) != std::string::npos;
 }
+
+bool file_exists (const std::string& name) {
+    struct stat buffer;   
+    return (stat (name.c_str(), &buffer) == 0); 
+}
+

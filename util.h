@@ -37,27 +37,27 @@ bool is_in_vector_string(vector<string> vector, string testval);
 
 template <typename T>
 bool is_in(vector<T> lst, T x) {
-  for (int i=0; i < (int) lst.size(); i++)
-    if (x==lst[i]) return true;
-  return false;
+    for (int i=0; i < (int) lst.size(); i++)
+        if (x==lst[i]) return true;
+    return false;
 }
 
 /* extract the subvector of lst regarding indexes [i0,i1] included */
 template <typename T>
 vector<T> v_extract_subvector(vector<T> & lst, int i0, int i1) {
-  vector<T> result;
-  if (i0 < 0 || i1 < 0 || 
-      i0 > ((int) lst.size()-1) ||
-      i1 > ((int) lst.size()-1) ||
-      i0 > i1) return result;
-  return vector<T>(lst.begin() + i0, lst.begin() + i1);
+    vector<T> result;
+    if (i0 < 0 || i1 < 0 || 
+            i0 > ((int) lst.size()-1) ||
+            i1 > ((int) lst.size()-1) ||
+            i0 > i1) return result;
+    return vector<T>(lst.begin() + i0, lst.begin() + i1);
 }
 
 inline string my_itoa(int i)
 {
-	ostringstream os;
-	os << i;
-	return os.str();
+    ostringstream os;
+    os << i;
+    return os.str();
 }
 
 int char_to_int(char c);
@@ -75,7 +75,7 @@ int string_to_int(char * argv);
 #define BOT_VERBOSE_MODE 1
 
 #define BOT_VERBOSE(x,...) do {                                   \
-	if ( BOT_VERBOSE_MODE ) { printf(x,...); fflush(stdout); }   \
+    if ( BOT_VERBOSE_MODE ) { printf(x,...); fflush(stdout); }   \
 } while(0);
 
 #define BOT_ERROR(x,...) do {                                     \
@@ -104,23 +104,23 @@ bool get_int_int_int_parameter(string param_name, int * arg1, int * arg2, int * 
 
 template<typename T>
 void list_concat(std::list<T> & dest, const std::list<T> src) {
-  for (typename std::list<T>::const_iterator elt = src.begin(); elt != src.end(); elt++)
-    dest.push_back(*elt);
+    for (typename std::list<T>::const_iterator elt = src.begin(); elt != src.end(); elt++)
+        dest.push_back(*elt);
 }
 
 template<typename T>
 bool list_contains(std::list<T> l, T elt) {
-	for (typename std::list<T>::iterator e = l.begin(); e != l.end(); e++)
-		if ((*e) == elt) return true;
-	return false;
+    for (typename std::list<T>::iterator e = l.begin(); e != l.end(); e++)
+        if ((*e) == elt) return true;
+    return false;
 }
 
 template<typename T>
 std::list<T> vector_to_list(std::vector<T> & V) {
-  std::list<T> L;
-  for (int i=0; i<(int)V.size(); i++)
-    L.push_back(V[i]);
-  return L;
+    std::list<T> L;
+    for (int i=0; i<(int)V.size(); i++)
+        L.push_back(V[i]);
+    return L;
 }
 
 vector<string> &split(const string &s, char delim, vector<string> &elems);
@@ -136,7 +136,7 @@ inline string join(const T &tab, string delimiter) {
     do {
         oss << (*it);
         it++;
-	notOver = (it != tab.end());
+        notOver = (it != tab.end());
         if (notOver) {
             oss << delimiter;
         }   
@@ -160,6 +160,8 @@ void file_put_contents(std::string path, std::string contents);
 
 void replaceAll(std::string& str, const std::string& from, const std::string& to);
 bool strContains(const std::string &str, const std::string &other);
+
+bool file_exists (const std::string& name);
 
 /*@}*/
 #endif
