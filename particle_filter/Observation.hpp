@@ -66,4 +66,8 @@ public:
       score = score * (1 - pFalsePositive) + pFalsePositive;
       return score;
     }
+
+  virtual std::string toStr() const {
+    return "[Unidentified observation]";
+  }
 };
