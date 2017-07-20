@@ -1,6 +1,7 @@
 #ifndef _RHOBAN_LOGGER_H
 #define _RHOBAN_LOGGER_H
 
+#include <stdint.h>
 #include <string>
 
 typedef enum {
@@ -22,6 +23,8 @@ namespace Rhoban
             void colorize(LoggerLevel lvl);
             void resetColor();
             void prefix();
+    
+            static void getTime(uint8_t &hour, uint8_t &min, uint8_t &sec);
 
             void error(const char *fmt, ...);
             void warning(const char *fmt, ...);

@@ -24,14 +24,26 @@ namespace Rhoban
 #endif
     }
 
-    void Logger::prefix()
+    void Logger::getTime(uint8_t &hour, uint8_t &min, uint8_t &sec)
     {
+#ifndef WIN32
         struct tm now;
         time_t timestamp;
-#ifndef WIN32
         time(&timestamp);
         now = *localtime(&timestamp);
-		fprintf(stderr, "[%02d:%02d:%02d] ", now.tm_hour, now.tm_min, now.tm_sec);
+
+        hour = now.tm_hour;
+        min = now.tm_min;
+        sec = now.tm_sec;
+#endif
+    }
+
+    void Logger::prefix()
+    {
+#ifndef WIN32
+        uint8_t hour, min, sec;
+        getTime(hour, min, sec);
+        fprintf(stderr, "[%02d:%02d:%02d] ", hour, min, sec);
 #endif
         fprintf(stderr, "[%s] ", module.c_str());
     }
