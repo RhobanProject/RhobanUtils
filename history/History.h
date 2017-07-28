@@ -18,6 +18,10 @@
 class History
 {
     public:
+        enum ValueType {
+            Number=0,
+            AngleRad=1
+        };
 
         /**
          * Initialization in timestamp duration
@@ -51,7 +55,7 @@ class History
          * linear interpolated value associated with
          * given timestamp
          */
-        double interpolate(double timestamp) const;
+        double interpolate(double timestamp, ValueType valueType=Number) const;
 
         /**
          * Enable to logging mode.

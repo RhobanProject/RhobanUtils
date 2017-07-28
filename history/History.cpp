@@ -1,3 +1,4 @@
+#include <geometry/Angle.hpp>
 #include "history/History.h"
 
 History::History(double window) : 
@@ -70,7 +71,7 @@ void History::pushValue(double timestamp, double value)
     _mutex.unlock();
 }
 
-double History::interpolate(double timestamp) const
+double History::interpolate(double timestamp, History::ValueType valueType) const
 {
     //Lock
     _mutex.lock();
@@ -110,11 +111,23 @@ double History::interpolate(double timestamp) const
 
     //Unlock
     _mutex.unlock();
+    
+    //Weights
+    double wLow = (tsUp-timestamp)/(tsUp-tsLow);
+    double wUp = (timestamp-tsLow)/(tsUp-tsLow);
 
-    //Return linear interpolated value
-    return 
-        (tsUp-timestamp)/(tsUp-tsLow)*valLow 
-        + (timestamp-tsLow)/(tsUp-tsLow)*valUp;
+    if (valueType == Number) {
+        //Return linear interpolated value
+        return wLow*valLow + wUp*valUp;
+    } else if (valueType == AngleRad) {
+        Angle angleLow(rad2deg(valLow));
+        Angle angleUp(rad2deg(valUp));
+        auto result = Angle::weightedAverage(angleLow, wLow, angleUp, wUp);
+
+        return deg2rad(result.getSignedValue());
+    } else {
+        throw std::logic_error("History unknown value type for interpolate");
+    }
 }
 
 void History::startLogging()
