@@ -15,10 +15,11 @@
 
   <buildtool_depend>catkin</buildtool_depend>
 
-  <build_depend>jsoncpp</build_depend>
-  <build_depend>model</build_depend>
+  <build_depend>jsoncpp</build_depend> <!-- rhobandeps/jsoncpp -->
+  <build_depend>Eigen</build_depend> <!-- rhobandeps/eigen -->
+
   <run_depend>jsoncpp</run_depend>
-  <run_depend>model</run_depend>
+  <run_depend>Eigen</run_depend>
 
   <export>
   </export>

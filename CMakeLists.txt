@@ -2,13 +2,15 @@ cmake_minimum_required(VERSION 2.8)
 project(RhobanUtils)
 
 find_package(catkin REQUIRED COMPONENTS
-  jsoncpp
-  model)
+  jsoncpp Eigen
+  )
+
+find_package(model)
 
 catkin_package(
   INCLUDE_DIRS .
   LIBRARIES RhobanUtils
-  CATKIN_DEPENDS jsoncpp model
+  CATKIN_DEPENDS jsoncpp
 )
 
 option (RHOBANUTILS_BUILD_APPS "Build Rhoban utils apps" OFF)
@@ -29,7 +31,6 @@ set(SOURCES_DIRECTORIES
   spline
   sockets
   logging
-  moves
   history
   threading
   trajectory
@@ -38,6 +39,13 @@ set(SOURCES_DIRECTORIES
   nominal
   random
 )
+
+if (model_FOUND)
+    set (SOURCES_DIRECTORIES
+        ${SOURCES_DIRECTORIES}
+        moves
+    )
+endif ()
 
 #Include Sources sub sources
 foreach (DIRECTORY ${SOURCES_DIRECTORIES})
@@ -56,8 +64,7 @@ target_link_libraries(RhobanUtils ${catkin_LIBRARIES})
 if (RHOBANUTILS_BUILD_APPS)
     add_executable (astarTest astar/main.cpp)
     target_link_libraries (astarTest RhobanUtils)
-    
+
     add_executable (graphTest graph/main.cpp)
     target_link_libraries (graphTest RhobanUtils)
 endif ()
-
