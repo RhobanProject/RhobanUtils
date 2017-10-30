@@ -61,6 +61,9 @@ endforeach (DIRECTORY)
 
 add_library (RhobanUtils ${ALL_SOURCES})
 target_link_libraries(RhobanUtils ${catkin_LIBRARIES})
+if (model_FOUND)
+    target_link_libraries(RhobanUtils ${model_LIBRARIES})
+endif ()
 
 if (RHOBANUTILS_BUILD_APPS)
     add_executable (astarTest astar/main.cpp)
