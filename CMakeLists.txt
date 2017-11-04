@@ -41,6 +41,7 @@ set(SOURCES_DIRECTORIES
 )
 
 if (model_FOUND)
+    message("Rhoban Model found!")
     include_directories(${model_INCLUDE_DIRS})
     set (SOURCES_DIRECTORIES
         ${SOURCES_DIRECTORIES}
