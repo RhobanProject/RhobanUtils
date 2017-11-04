@@ -20,6 +20,7 @@
 
   <run_depend>jsoncpp</run_depend>
   <run_depend>Eigen</run_depend>
+  <run_depend>model</run_depend>
 
   <export>
   </export>
