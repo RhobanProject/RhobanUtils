@@ -1,4 +1,5 @@
 set(SOURCES
-    util.cpp
+  angle.cpp
+  util.cpp
 )
 

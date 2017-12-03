@@ -1,5 +1,0 @@
-
-set(SOURCES
-    History.cpp
-)
-

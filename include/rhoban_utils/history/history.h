@@ -9,6 +9,9 @@
 #include <ostream>
 #include <fstream>
 
+namespace rhoban_utils
+{
+
 /**
  * History
  *
@@ -114,3 +117,4 @@ class History
         std::deque<std::pair<double, double>> _values;
 };
 
+}

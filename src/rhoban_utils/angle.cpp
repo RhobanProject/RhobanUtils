@@ -1,13 +1,15 @@
 #define _USE_MATH_DEFINES 
 #include <cmath>
 
-#include "Angle.hpp"
-#include "Point.hpp"
+#include "rhoban_utils/angle.h"
 
 
 #define EPSILON 0.000001
 
 using namespace std;
+
+namespace rhoban_utils
+{
 
 Angle::Angle(double a){
   value = fmod(a, 360.0);
@@ -45,9 +47,9 @@ Angle Angle::arccos(double x)
 Angle Angle::weightedAverage(const Angle & a1, double w1,
                              const Angle & a2, double w2)
 {
-  Point p1(w1 * cos(a1), w1 * sin(a1));
-  Point p2(w2 * cos(a2), w2 * sin(a2));
-  return (p1 + p2).getTheta();
+  double x = w1 * cos(a1) + w2 * cos(a2);
+  double y = w1 * sin(a1) + w2 * sin(a2);
+  return Angle(rad2deg(atan2(y, x)));
 }
 
 // Mean and stdDev from wikipedia
@@ -162,4 +164,6 @@ double normalizeRad(double angleRad){
     value -= 2*M_PI;
   }
   return value;
+}
+
 }

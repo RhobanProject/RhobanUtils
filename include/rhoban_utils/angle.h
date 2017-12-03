@@ -1,12 +1,10 @@
-#ifndef ANGLE_HPP
-#define ANGLE_HPP
+#pragma once
 
 #include <vector>
 #include <ostream>
 
-#ifdef ENABLE_OPENCV
-#include <opencv2/core/core.hpp>
-#endif
+namespace rhoban_utils
+{
 
 /* This class aims to handle most of the frequent problems when manipulating
  * angles. In this class, if not specified, values are always between 0 and 
@@ -40,20 +38,21 @@ public:
   Angle operator-(const Angle & a) const;
   Angle operator+(const Angle & a) const;
 
-#ifdef ENABLE_OPENCV
-  static Angle angleBetween(const cv::Point3f & v1, const cv::Point3f & v2)
-    {
-      double nv1 = norm(v1);
-      double nv2 = norm(v2);
-      if (nv1 < 1e-9 || nv2 < 1e-9) {
-        return 0;
-      }
-      double x = v1.dot(v2) / (nv1 * nv2);
-      if (x > 1.0) { x = 1.0;}
-      if (x < -1.0) { x = -1.0;}
-      return arccos(x);
-    }
-#endif
+// TODO refactor: move it elsewhere (vision)
+//#ifdef ENABLE_OPENCV
+//  static Angle angleBetween(const cv::Point3f & v1, const cv::Point3f & v2)
+//    {
+//      double nv1 = norm(v1);
+//      double nv2 = norm(v2);
+//      if (nv1 < 1e-9 || nv2 < 1e-9) {
+//        return 0;
+//      }
+//      double x = v1.dot(v2) / (nv1 * nv2);
+//      if (x > 1.0) { x = 1.0;}
+//      if (x < -1.0) { x = -1.0;}
+//      return arccos(x);
+//    }
+//#endif
 
   bool operator==(const Angle & a) const;
 };
@@ -75,4 +74,4 @@ double rad2deg(double radAngle);
 /// return the normalized angle in [-pi,pi] from radAngle
 double normalizeRad(double radAngle);
 
-#endif//ANGLE_HPP
+}

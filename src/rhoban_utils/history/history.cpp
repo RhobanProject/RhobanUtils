@@ -1,5 +1,8 @@
-#include <geometry/Angle.hpp>
-#include "history/History.h"
+#include <rhoban_utils/angle.h>
+#include "rhoban_utils/history/history.h"
+
+namespace rhoban_utils
+{
 
 History::History(double window) : 
     _mutex(),
@@ -214,3 +217,4 @@ void History::loadReplay(
     }
 }
 
+}

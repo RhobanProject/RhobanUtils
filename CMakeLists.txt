@@ -24,9 +24,10 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 #List Sources sub source directories
 set(SOURCES_DIRECTORIES
   src/rhoban_utils
+  src/rhoban_utils/history
 # TODO refactor: treat this
 #  timing
-#  geometry
+#  geometry -> move to rhoban_geometry
 #  spline
 #  sockets
 #  logging
@@ -34,8 +35,8 @@ set(SOURCES_DIRECTORIES
 #  history
 #  threading
 #  trajectory
-#  astar
-#  graph
+#  astar -> move to rhoban_graphs
+#  graph -> move to rhoban_graphs
 #  nominal
 #  random
 )
