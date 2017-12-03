@@ -1,5 +1,8 @@
 #pragma once
 
+namespace rhoban_utils
+{
+
 class Control
 {
     public:
@@ -13,3 +16,5 @@ class Control
         // Output of the controller
         float output;
 };
+
+}

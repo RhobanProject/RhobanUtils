@@ -1,4 +1,7 @@
-#include "Control.h"
+#include "rhoban_utils/control/control.h"
+
+namespace rhoban_utils
+{
 
 Control::Control()
 {
@@ -17,4 +20,6 @@ void Control::update(float value)
     if (tmp > max) tmp = max;
 
     output = tmp;
+}
+
 }

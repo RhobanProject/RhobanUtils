@@ -12,11 +12,13 @@
 //
 //*****************************************************************************
 
-#if !defined(PID_H)
-#define PID_H
+#pragma once
 
 #include <cfloat>
 #include <math.h>
+
+namespace rhoban_utils
+{
 
 class PID
 {
@@ -59,4 +61,4 @@ public:
     float total;
 };
 
-#endif
+}

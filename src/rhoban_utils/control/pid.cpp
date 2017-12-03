@@ -13,8 +13,11 @@
 //*****************************************************************************
 
 
-#include "PID.h"
+#include "rhoban_utils/control/pid.h"
 #include <iostream>
+
+namespace rhoban_utils
+{
 
 PID::PID()
 {
@@ -130,4 +133,6 @@ float PID::compute(float setpoint, float feedback, float elapsed)
         return (total<output_min ? output_min : total);
     else
         return (total>output_max ? output_max : total);
+}
+
 }

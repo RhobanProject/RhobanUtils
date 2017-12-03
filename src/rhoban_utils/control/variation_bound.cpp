@@ -1,4 +1,7 @@
-#include "VariationBound.h"
+#include "rhoban_utils/control/variation_bound.h"
+
+namespace rhoban_utils
+{
 
 void VariationBound::update(double &output, double target, double limit, double dt)
 {
@@ -26,4 +29,6 @@ void VariationBound::update(float &output, float target, float limit, float dt)
     }
 
     output += delta;
+}
+
 }
