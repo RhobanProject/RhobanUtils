@@ -3,7 +3,11 @@
 #include <cstdio>
 #include <json/json.h>
 #include <util.h>
-#include "Function.h"
+
+#include "rhoban_utils/spline/function.h"
+
+namespace rhoban_utils
+{
 
 Function::Function()
     : nbPoints(0)
@@ -191,4 +195,6 @@ double Function::getMod(double x)
     }
 
     return get(x);
+}
+
 }

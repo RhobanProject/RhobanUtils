@@ -1,7 +1,10 @@
 #include <vector>
 #include <cmath>
 #include <algorithm>
-#include "PolySpline.h"
+#include "rhoban_utils/spline/poly_spline.h"
+
+namespace rhoban_utils
+{
 
 void PolySpline::addPoint(double pos, double val, double delta)
 {
@@ -112,4 +115,6 @@ void PolySpline::computeSplines()
 
         _splines.push_back(spline);
     }
+}
+
 }
