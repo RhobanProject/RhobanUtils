@@ -2,8 +2,8 @@
 #include <cstdlib>
 #include <cstdio>
 #include <json/json.h>
-#include <util.h>
 
+#include "rhoban_utils/util.h"
 #include "rhoban_utils/spline/function.h"
 
 namespace rhoban_utils

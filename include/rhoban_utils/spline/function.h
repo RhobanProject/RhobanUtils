@@ -4,6 +4,9 @@
 #include <map>
 #include <string>
 
+namespace rhoban_utils
+{
+
 class Function
 {
     public:
@@ -62,3 +65,5 @@ class Function
          */
         int nbPoints;
 };
+
+}

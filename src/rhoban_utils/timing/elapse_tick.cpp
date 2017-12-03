@@ -1,6 +1,7 @@
 #include "rhoban_utils/timing/elapse_tick.h"
 
-using Utils::Timing::TimeStamp;
+namespace rhoban_utils
+{
 
 ElapseTick::ElapseTick() :
     hasStats(false), 
@@ -40,4 +41,6 @@ void ElapseTick::tick()
             avgTime = avgTime*0.99 + duration*0.01;
         }
     }
+}
+
 }

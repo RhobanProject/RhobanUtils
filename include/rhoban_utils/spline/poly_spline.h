@@ -3,6 +3,9 @@
 #include <vector>
 #include <algorithm>
 
+namespace rhoban_utils
+{
+
 /**
  * PolySpline
  *
@@ -92,3 +95,5 @@ class PolySpline
          */
         void computeSplines();
 };
+
+}

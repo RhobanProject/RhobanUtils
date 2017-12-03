@@ -27,26 +27,26 @@ double TimeStamp::getTimeMS() const
 
 }
 
-double diffSec(const Utils::Timing::TimeStamp & src,
-    const Utils::Timing::TimeStamp & dst)
+double diffSec(const rhoban_utils::TimeStamp & src,
+    const rhoban_utils::TimeStamp & dst)
 {
     double elapsedTicks = (dst - src).count();
     return elapsedTicks * steady_clock::period::num / steady_clock::period::den;
 }
 
-double diffMs(const Utils::Timing::TimeStamp & src,
-    const Utils::Timing::TimeStamp & dst)
+double diffMs(const rhoban_utils::TimeStamp & src,
+    const rhoban_utils::TimeStamp & dst)
 {
     return diffSec(src, dst) * 1000;
 }
 
-bool operator<(const Utils::Timing::TimeStamp & ts1,
-    const Utils::Timing::TimeStamp & ts2)
+bool operator<(const rhoban_utils::TimeStamp & ts1,
+    const rhoban_utils::TimeStamp & ts2)
 {
     return diffMs(ts1, ts2) > 0;
 }
-bool operator>(const Utils::Timing::TimeStamp & ts1,
-    const Utils::Timing::TimeStamp & ts2)
+bool operator>(const rhoban_utils::TimeStamp & ts1,
+    const rhoban_utils::TimeStamp & ts2)
 {
     return diffMs(ts1, ts2) < 0;
 }

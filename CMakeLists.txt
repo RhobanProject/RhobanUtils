@@ -30,14 +30,12 @@ set(SOURCES_DIRECTORIES
   src/rhoban_utils/logging
   src/rhoban_utils/nominal
   src/rhoban_utils/sockets
+  src/rhoban_utils/spline
   src/rhoban_utils/threading
+  src/rhoban_utils/timing
 # TODO refactor: treat this
-#  timing
 #  geometry -> move to rhoban_geometry
-#  spline
-#  history
-#  threading
-#  trajectory
+#  trajectory -> move (control + motion)
 #  astar -> move to rhoban_graphs
 #  graph -> move to rhoban_graphs
 #  random
