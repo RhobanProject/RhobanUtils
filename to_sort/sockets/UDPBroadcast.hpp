@@ -4,7 +4,7 @@
 #include <vector>
 #include "common.h"
 
-namespace Rhoban {
+namespace rhoban_utils {
 
 /**
  * UDPBroadcast

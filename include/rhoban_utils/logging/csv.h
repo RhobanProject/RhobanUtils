@@ -6,7 +6,7 @@
 #include <map>
 #include <string>
 
-namespace Rhoban
+namespace rhoban_utils
 {
     class CSV
     {

@@ -3,7 +3,8 @@
 #ifndef WIN32
 #include <unistd.h>
 #endif
-#include "Logger.h"
+
+#include "rhoban_utils/logging/logger.h"
 
 #define T_COLOR_RED     "\x1b[0;31m"
 #define T_COLOR_GREEN   "\x1b[0;32m"
@@ -11,7 +12,7 @@
 #define T_COLOR_BLUE    "\x1b[0;34m"
 #define T_COLOR_RESET   "\x1b[0m"
 
-namespace Rhoban
+namespace rhoban_utils
 {
     Logger::Logger(std::string module_, LoggerLevel level_)
         : module(module_),

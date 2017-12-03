@@ -1,6 +1,6 @@
 
 set (SOURCES 
-    Logger.cpp
-    CSV.cpp
+    logger.cpp
+    csv.cpp
     term_display.cpp
     )

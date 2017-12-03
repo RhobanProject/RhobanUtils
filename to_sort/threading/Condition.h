@@ -12,7 +12,7 @@
 
 #include "Mutex.h"
 
-namespace Rhoban
+namespace rhoban_utils
 {
 
 class Condition : public Mutex

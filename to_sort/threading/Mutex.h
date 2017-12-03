@@ -19,7 +19,7 @@
 
 //#define DEBUG_MUTEXES
 
-namespace Rhoban
+namespace rhoban_utils
 {
 class Condition;
 

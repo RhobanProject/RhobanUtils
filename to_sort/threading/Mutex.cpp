@@ -18,7 +18,7 @@
 #include "Mutex.h"
 
 using namespace std;
-using namespace Rhoban;
+using namespace rhoban_utils;
 
 Mutex::Mutex(void)
 {

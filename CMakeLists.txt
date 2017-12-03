@@ -25,12 +25,12 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 set(SOURCES_DIRECTORIES
   src/rhoban_utils
   src/rhoban_utils/history
+  src/rhoban_utils/logging
 # TODO refactor: treat this
 #  timing
 #  geometry -> move to rhoban_geometry
 #  spline
 #  sockets
-#  logging
 #  moves
 #  history
 #  threading

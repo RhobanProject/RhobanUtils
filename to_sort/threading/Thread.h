@@ -44,7 +44,7 @@
 #define TH_MSG(...)         LOG_CPP(2, TH_LOG_LEVEL, "thread", __VA_ARGS__)
 #define TH_DEBUG(...)       LOG_CPP(3, TH_LOG_LEVEL, "thread:debug", __VA_ARGS__)
 
-namespace Rhoban
+namespace rhoban_utils
 {
 
 class Thread

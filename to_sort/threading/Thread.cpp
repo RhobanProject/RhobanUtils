@@ -19,7 +19,7 @@
 #include "Thread.h"
 
 using namespace std;
-using namespace Rhoban;
+using namespace rhoban_utils;
 
 Thread::Thread()
 {

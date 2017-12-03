@@ -13,7 +13,7 @@ typedef enum {
     LoggerDebug
 } LoggerLevel;
 
-namespace Rhoban
+namespace rhoban_utils
 {
     class Logger
     {

@@ -25,7 +25,7 @@
 #include "Condition.h"
 
 using namespace std;
-using namespace Rhoban;
+using namespace rhoban_utils;
 
 Condition::Condition()
 {

@@ -1,6 +1,6 @@
-#include "CSV.h"
+#include "rhoban_utils/logging/csv.h"
 
-namespace Rhoban
+namespace rhoban_utils
 {
     CSV::CSV()
     {

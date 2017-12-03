@@ -25,7 +25,7 @@
 #include <time.h>
 #include <sys/timeb.h>
 
-namespace Rhoban
+namespace rhoban_utils
 {
 
 	struct tttt {
@@ -39,7 +39,7 @@ namespace Rhoban
 #include <time.h>
 #include <sys/time.h>
 
-namespace Rhoban
+namespace rhoban_utils
 {
 	typedef struct timeval chrono;
 #endif

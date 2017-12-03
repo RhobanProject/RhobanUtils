@@ -12,7 +12,7 @@
 
 #include "UDPBroadcast.hpp"
 
-namespace Rhoban {
+namespace rhoban_utils {
 
 UDPBroadcast::UDPBroadcast(int portRead, int portWrite)
 {

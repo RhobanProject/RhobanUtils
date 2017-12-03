@@ -5,10 +5,8 @@
 #ifndef MSVC
 #include <unistd.h>
 #endif
-#include "term_display.h"
-#include <timing/chrono.h>
 
-Rhoban::chrono tt_chr;
+#include "rhoban_utils/logging/term_display.h"
 
 #ifdef WIN32
 COORD coordScreen;
