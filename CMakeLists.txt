@@ -1,19 +1,19 @@
 cmake_minimum_required(VERSION 2.8)
-project(RhobanUtils)
+project(rhoban_utils)
 
 find_package(catkin REQUIRED COMPONENTS
   jsoncpp
-  model)
-
-catkin_package(
-  INCLUDE_DIRS .
-  LIBRARIES RhobanUtils
-  CATKIN_DEPENDS jsoncpp model
 )
 
-option (RHOBANUTILS_BUILD_APPS "Build Rhoban utils apps" OFF)
+catkin_package(
+  INCLUDE_DIRS include
+  LIBRARIES rhoban_utils
+  CATKIN_DEPENDS jsoncpp 
+)
 
-include_directories(. ${catkin_INCLUDE_DIRS})
+option (RHOBAN_UTILS_BUILD_APPS "Build Rhoban utils apps" OFF)
+
+include_directories(include ${catkin_INCLUDE_DIRS})
 
 #Enable C++11
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wextra")
@@ -23,20 +23,21 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 
 #List Sources sub source directories
 set(SOURCES_DIRECTORIES
-  .
-  timing
-  geometry
-  spline
-  sockets
-  logging
-  moves
-  history
-  threading
-  trajectory
-  astar
-  graph
-  nominal
-  random
+  src/rhoban_utils
+# TODO refactor: treat this
+#  timing
+#  geometry
+#  spline
+#  sockets
+#  logging
+#  moves
+#  history
+#  threading
+#  trajectory
+#  astar
+#  graph
+#  nominal
+#  random
 )
 
 #Include Sources sub sources
@@ -50,14 +51,15 @@ foreach (DIRECTORY ${SOURCES_DIRECTORIES})
     set (ALL_SOURCES ${ALL_SOURCES} ${PREFIXED_SOURCES})
 endforeach (DIRECTORY)
 
-add_library (RhobanUtils ${ALL_SOURCES})
-target_link_libraries(RhobanUtils ${catkin_LIBRARIES})
+add_library (rhoban_utils ${ALL_SOURCES})
+target_link_libraries(rhoban_utils ${catkin_LIBRARIES})
 
-if (RHOBANUTILS_BUILD_APPS)
-    add_executable (astarTest astar/main.cpp)
-    target_link_libraries (astarTest RhobanUtils)
-    
-    add_executable (graphTest graph/main.cpp)
-    target_link_libraries (graphTest RhobanUtils)
-endif ()
+# TODO refactor: move to rhoban_graphs
+#if (RHOBANUTILS_BUILD_APPS)
+#    add_executable (astarTest astar/main.cpp)
+#    target_link_libraries (astarTest rhoban_utils)
+#    
+#    add_executable (graphTest graph/main.cpp)
+#    target_link_libraries (graphTest rhoban_utils)
+#endif ()
 
