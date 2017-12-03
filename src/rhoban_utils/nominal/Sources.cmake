@@ -1,4 +1,4 @@
 
 set (SOURCES
-    Nominal.cpp
+    nominal.cpp
     )

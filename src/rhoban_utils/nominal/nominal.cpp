@@ -2,8 +2,12 @@
 #include <math.h>
 #include <stdexcept>
 #include <iostream>
-#include "Nominal.h"
 // #include <boost/math/distributions/chi_squared.hpp>
+
+#include "rhoban_utils/nominal/nominal.h"
+
+namespace rhoban_utils
+{
 
 double chi2_cdf(double x, double k)
 {
@@ -211,3 +215,4 @@ void Nominal::loadJson(std::string filename)
     }
 }
 
+}

@@ -6,6 +6,9 @@
 #include <Eigen/Dense>
 #include <json/json.h>
 
+namespace rhoban_utils
+{
+
 class Nominal
 {
     public:
@@ -36,3 +39,5 @@ class Nominal
         int nbins;
         std::map<int, Bin> bins;
 };
+
+}

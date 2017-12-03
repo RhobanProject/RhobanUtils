@@ -3,12 +3,13 @@ project(rhoban_utils)
 
 find_package(catkin REQUIRED COMPONENTS
   jsoncpp
+  eigen
 )
 
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES rhoban_utils
-  CATKIN_DEPENDS jsoncpp 
+  CATKIN_DEPENDS jsoncpp eigen
 )
 
 option (RHOBAN_UTILS_BUILD_APPS "Build Rhoban utils apps" OFF)
@@ -27,6 +28,7 @@ set(SOURCES_DIRECTORIES
   src/rhoban_utils/control
   src/rhoban_utils/history
   src/rhoban_utils/logging
+  src/rhoban_utils/nominal
 # TODO refactor: treat this
 #  timing
 #  geometry -> move to rhoban_geometry
@@ -37,7 +39,6 @@ set(SOURCES_DIRECTORIES
 #  trajectory
 #  astar -> move to rhoban_graphs
 #  graph -> move to rhoban_graphs
-#  nominal
 #  random
 )
 
