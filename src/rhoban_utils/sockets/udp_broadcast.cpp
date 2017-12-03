@@ -10,7 +10,7 @@
 #include <errno.h>
 #include <string.h>
 
-#include "UDPBroadcast.hpp"
+#include "rhoban_utils/sockets/udp_broadcast.h"
 
 namespace rhoban_utils {
 

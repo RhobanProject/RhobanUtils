@@ -29,11 +29,11 @@ set(SOURCES_DIRECTORIES
   src/rhoban_utils/history
   src/rhoban_utils/logging
   src/rhoban_utils/nominal
+  src/rhoban_utils/sockets
 # TODO refactor: treat this
 #  timing
 #  geometry -> move to rhoban_geometry
 #  spline
-#  sockets
 #  history
 #  threading
 #  trajectory
