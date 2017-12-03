@@ -1,12 +1,15 @@
 #pragma once
 
-#include "TimeStamp.hpp"
+#include "rhoban_utils/timing/time_stamp.h"
+
+namespace rhoban_utils
+{
 
 /**
  * ElapseTick
  *
  * Implement ticked behaviour
- * with stats and elapsted 
+ * with stats and elapsed 
  * time computation.
  */
 class ElapseTick
@@ -51,6 +54,7 @@ class ElapseTick
         /**
          * Elapsed computation
          */
-        Utils::Timing::TimeStamp lastTimestamp;
+        TimeStamp lastTimestamp;
 };
 
+}

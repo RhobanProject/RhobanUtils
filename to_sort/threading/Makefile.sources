@@ -1,8 +1,0 @@
-  
-UTILS_THREAD_SRC =   \
-    Thread.cpp \
-    Mutex.cpp \
-    Condition.cpp \
-    TimedThread.cpp
-
-UTILS_THREAD_EXE = tests/test_timed_thread

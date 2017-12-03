@@ -10,8 +10,7 @@
 /**
  * Currently this 'Benchmark method' is not thread-safe.
  */
-namespace Utils {
-  namespace Timing {
+namespace rhoban_utils {
 
     class Benchmark
     {
@@ -86,5 +85,4 @@ namespace Utils {
        */
       static double closeCSV(std::ostream & out, bool header, int detailLevel = -1);
     };
-  }
 }

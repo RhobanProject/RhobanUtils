@@ -1,9 +1,8 @@
-#include "TimeStamp.hpp"
+#include "rhoban_utils/timing/time_stamp.h"
 
 using namespace std::chrono;
 
-namespace Utils {
-namespace Timing {
+namespace rhoban_utils {
 
 TimeStamp::TimeStamp(){}
 TimeStamp::TimeStamp(const time_point<steady_clock> & timePoint)
@@ -26,7 +25,6 @@ double TimeStamp::getTimeMS() const
         time_since_epoch()).count();
 }
 
-}
 }
 
 double diffSec(const Utils::Timing::TimeStamp & src,

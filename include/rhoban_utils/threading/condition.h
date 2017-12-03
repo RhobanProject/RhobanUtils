@@ -7,10 +7,9 @@
  * Licence Creative Commons *CC BY-NC-SA
  * http://creativecommons.org/licenses/by-nc-sa/3.0
  *************************************************/
-#ifndef _CONDITION_H
-#define _CONDITION_H
+#pragma once
 
-#include "Mutex.h"
+#include "rhoban_utils/threading/mutex.h"
 
 namespace rhoban_utils
 {
@@ -55,4 +54,3 @@ private:
 };
 
 }
-#endif // _CONDITION_H

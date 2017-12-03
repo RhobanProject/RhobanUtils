@@ -14,70 +14,63 @@
  *
  *  \brief   Basic tools for time measure.
  *****************************************************************************/
-#ifndef CHRONO_H
-#define CHRONO_H
+#pragma once
 
 /*****************************************************************************/
 /*!\brief A Rhoban::chrono is just a type value
  *****************************************************************************/
 
-#ifdef MSVC
-#include <time.h>
-#include <sys/timeb.h>
-
 namespace rhoban_utils
 {
 
+#ifdef MSVC
+#include <time.h>
+#include <sys/timeb.h>
 	struct tttt {
 		long    tv_sec;
 		long    tv_usec;
 	};
 
-	typedef struct tttt chrono;
-	int gettimeofday(Rhoban::chrono *tp, void *tz = NULL);
+	typedef struct tttt t_chrono;
+	int gettimeofday(t_chrono *tp, void *tz = NULL);
 #else
 #include <time.h>
 #include <sys/time.h>
-
-namespace rhoban_utils
-{
-	typedef struct timeval chrono;
+	typedef struct timeval t_chrono;
 #endif
 
 
 	/*****************************************************************************/
-	/*!\brief Reset the Rhoban::chrono
-	 * \param chr the Rhoban::chrono to be resetted.
+	/*!\brief Reset the chrono
+	 * \param chr the t_chrono to be resetted.
 	 *****************************************************************************/
-	void chrono_reset(Rhoban::chrono * chr);
+	void chrono_reset(t_chrono * chr);
 
 	/*****************************************************************************/
 	/*!\brief Create a new chono.
-	 * \return the address of the Rhoban::chrono.
+	 * \return the address of the chrono.
 	 *****************************************************************************/
-	Rhoban::chrono * chrono_create();
+	t_chrono * chrono_create();
 
 	/*****************************************************************************/
-	/*!\brief kill a Rhoban::chrono and free its resources
+	/*!\brief kill a chrono and free its resources
 	 *****************************************************************************/
-	void delete_chrono(Rhoban::chrono * chr);
+	void delete_chrono(t_chrono * chr);
 
 	/*****************************************************************************/
 	/*!\brief Gives the number of second elapsed from the last timer reset.
 	 *****************************************************************************/
-	long int chrono_sec(const Rhoban::chrono * chr);
+	long int chrono_sec(const t_chrono * chr);
 
 	/*****************************************************************************/
 	/*!\brief Gives the number of milli second elapsed from the last timer reset.
 	 *****************************************************************************/
-	long int chrono_msec(const Rhoban::chrono * chr);
+	long int chrono_msec(const t_chrono * chr);
 
 	/*****************************************************************************/
 	/*!\brief Gives the number of micro second elapsed from the last timer reset.
 	 *****************************************************************************/
-	long int chrono_usec(const Rhoban::chrono * chr);
-
-}
+	long int chrono_usec(const t_chrono * chr);
 
 class Chrono
 {
@@ -118,9 +111,10 @@ class Chrono
 		friend Chrono operator-(Chrono chr, const Chrono& rhs){ return chr -= rhs; }
 
 protected:
-        Rhoban::chrono chr;
+        t_chrono chr;
 };
 
-#endif
+}
+
 /*****************************************************************************/
 /*****************************************************************************/

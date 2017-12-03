@@ -15,10 +15,12 @@
 #include <iostream>
 #include <stdexcept>
 
-#include "Mutex.h"
+#include "rhoban_utils/threading/mutex.h"
 
 using namespace std;
-using namespace rhoban_utils;
+
+namespace rhoban_utils
+{
 
 Mutex::Mutex(void)
 {
@@ -84,4 +86,6 @@ void Mutex::unlock(void)
 #ifdef DEBUG_MUTEXES
 	cout << "Thread " <<  (int) pthread_self().p << " unlocked mutex " << (int) this << endl << flush;
 #endif
+}
+
 }

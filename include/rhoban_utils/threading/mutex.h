@@ -7,8 +7,7 @@
  * Licence Creative Commons *CC BY-NC-SA
  * http://creativecommons.org/licenses/by-nc-sa/3.0
  *************************************************/
-#ifndef MUTEX_H
-#define MUTEX_H
+#pragma once
 
 #ifndef MSVC
 #include <pthread.h>
@@ -40,5 +39,4 @@ protected:
 #endif
 };
 }
-#endif
 

@@ -30,6 +30,7 @@ set(SOURCES_DIRECTORIES
   src/rhoban_utils/logging
   src/rhoban_utils/nominal
   src/rhoban_utils/sockets
+  src/rhoban_utils/threading
 # TODO refactor: treat this
 #  timing
 #  geometry -> move to rhoban_geometry

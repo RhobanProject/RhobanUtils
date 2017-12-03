@@ -16,10 +16,13 @@
 #endif
 #include <stdio.h>
 #include <signal.h>
-#include "Thread.h"
+
+#include "rhoban_utils/threading/thread.h"
 
 using namespace std;
-using namespace rhoban_utils;
+
+namespace rhoban_utils
+{
 
 Thread::Thread()
 {
@@ -347,3 +350,4 @@ void Thread::wait_signal(int signal)
 }
 
 
+}

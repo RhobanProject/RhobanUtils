@@ -17,10 +17,7 @@
   added suspend/resume functions, signal handling and control states
   @date 08/2011
 */
-
-#ifndef THREAD_H
-#define THREAD_H
-#include <logging/log.h>
+#pragma once
 
 #include <stdexcept>
 
@@ -29,8 +26,9 @@
 #include <stdexcept>
 #endif
 
-#include "Mutex.h"
-#include "Condition.h"
+#include "rhoban_utils/logging/log.h"
+#include "rhoban_utils/threading/mutex.h"
+#include "rhoban_utils/threading/condition.h"
 
 /**
  * MotorPrimitive log level
@@ -310,5 +308,4 @@ protected:
 };
 
 }
-#endif
 

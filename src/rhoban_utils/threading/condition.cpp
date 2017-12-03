@@ -13,8 +13,6 @@
 #include <stdexcept>
 #include <ctime>
 
-#include <timing/chrono.h>
-
 #ifndef MSVC
 #include <pthread.h>
 #endif
@@ -22,7 +20,8 @@
 #include <cerrno>
 #include <iostream>
 
-#include "Condition.h"
+#include "rhoban_utils/threading/condition.h"
+#include "rhoban_utils/timing/chrono.h"
 
 using namespace std;
 using namespace rhoban_utils;
@@ -55,7 +54,7 @@ int Condition::wait(Mutex * mutex, unsigned int timeout)
     int ret;
 #ifndef MSVC
     struct timespec time;
-    Rhoban::chrono tv;
+    rhoban_utils::t_chrono tv;
 
     gettimeofday(&tv, NULL);
 

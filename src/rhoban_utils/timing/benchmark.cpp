@@ -1,4 +1,4 @@
-#include "Benchmark.hpp"
+#include "rhoban_utils/timing/benchmark.h"
 
 #include <algorithm>
 #include <exception>
@@ -13,8 +13,7 @@
 
 using namespace std::chrono;
 
-namespace Utils {
-namespace Timing {
+namespace rhoban_utils {
 
 /* Static variables */
 Benchmark * Benchmark::current = NULL;
@@ -243,6 +242,5 @@ void Benchmark::printCSV(std::ostream & out, int depth, int maxDepth)
         << name        << ","
         << unknownTime << std::endl;
   }
-}
 }
 }
