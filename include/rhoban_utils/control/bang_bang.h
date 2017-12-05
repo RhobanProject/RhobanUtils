@@ -2,6 +2,9 @@
 
 #include <Eigen/Core>
 
+namespace rhoban_utils
+{
+
 /// Implement bang bang law for multi-dimensional space with a limit on
 /// the norm of speed and acceleration vectors
 class BangBang
@@ -40,3 +43,5 @@ private:
   bool reachFullSpeed(const Eigen::VectorXd & src,
                       const Eigen::VectorXd & dst) const;
 };
+
+}

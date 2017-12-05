@@ -1,4 +1,7 @@
-#include "BangBang.h"
+#include "rhoban_utils/control/bang_bang.h"
+
+namespace rhoban_utils
+{
 
 BangBang::BangBang(double max_vel_, double max_acc_)
   : max_vel(max_vel_), max_acc(max_acc_)
@@ -75,4 +78,6 @@ bool BangBang::reachFullSpeed(const Eigen::VectorXd & src,
 {
   double dist = (src - dst).norm();
   return dist > 2 * accelerationDistance();
+}
+
 }
