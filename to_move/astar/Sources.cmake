@@ -1,4 +1,0 @@
-
-set (SOURCES
-    AStar.cpp
-    )

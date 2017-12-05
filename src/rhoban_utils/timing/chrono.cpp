@@ -61,13 +61,13 @@ return 0;
 
 #endif
 
-			 t_chrono * t_chrono_create() {
+t_chrono * chrono_create() {
   t_chrono * chr = (t_chrono*) malloc(sizeof(t_chrono));
   chrono_reset(chr);
   return chr;
 }
 
-void t_chrono_reset(t_chrono * chr) {
+void chrono_reset(t_chrono * chr) {
   gettimeofday(chr,NULL);
 }
 

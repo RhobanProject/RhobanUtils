@@ -6,13 +6,13 @@ find_package(catkin REQUIRED COMPONENTS
   eigen
 )
 
+find_package(Threads REQUIRED)
+
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES rhoban_utils
   CATKIN_DEPENDS jsoncpp eigen
 )
-
-option (RHOBAN_UTILS_BUILD_APPS "Build Rhoban utils apps" OFF)
 
 include_directories(include ${catkin_INCLUDE_DIRS})
 
@@ -34,11 +34,7 @@ set(SOURCES_DIRECTORIES
   src/rhoban_utils/threading
   src/rhoban_utils/timing
 # TODO refactor: treat this
-#  geometry -> move to rhoban_geometry
 #  trajectory -> move (control + motion)
-#  astar -> move to rhoban_graphs
-#  graph -> move to rhoban_graphs
-#  random
 )
 
 #Include Sources sub sources
@@ -53,14 +49,5 @@ foreach (DIRECTORY ${SOURCES_DIRECTORIES})
 endforeach (DIRECTORY)
 
 add_library (rhoban_utils ${ALL_SOURCES})
-target_link_libraries(rhoban_utils ${catkin_LIBRARIES})
-
-# TODO refactor: move to rhoban_graphs
-#if (RHOBANUTILS_BUILD_APPS)
-#    add_executable (astarTest astar/main.cpp)
-#    target_link_libraries (astarTest rhoban_utils)
-#    
-#    add_executable (graphTest graph/main.cpp)
-#    target_link_libraries (graphTest rhoban_utils)
-#endif ()
+target_link_libraries(rhoban_utils ${catkin_LIBRARIES} Threads::Threads)
 
