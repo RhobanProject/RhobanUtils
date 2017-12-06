@@ -7,21 +7,19 @@
  * Licence Creative Commons *CC BY-NC-SA
  * http://creativecommons.org/licenses/by-nc-sa/3.0
  *************************************************/
-#ifndef UTIL_H
-#define UTIL_H
-
-typedef unsigned char ui8;
-typedef unsigned short ui16;
-typedef unsigned int ui32;
-typedef unsigned int uint;
+#pragma once
 
 #include <sstream>
 #include <string>
 #include <vector>
 #include <list>
-#include <list>
 #include <stdexcept>
 #include <ctime>
+
+typedef unsigned char ui8;
+typedef unsigned short ui16;
+typedef unsigned int ui32;
+typedef unsigned int uint;
 
 using namespace std;
 
@@ -162,6 +160,3 @@ void replaceAll(std::string& str, const std::string& from, const std::string& to
 bool strContains(const std::string &str, const std::string &other);
 
 bool file_exists (const std::string& name);
-
-/*@}*/
-#endif

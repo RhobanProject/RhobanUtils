@@ -109,15 +109,15 @@ Angle Angle::operator+(const Angle & a) const{
 
 double cos(const Angle & a)
 {
-  return cos(a.getValue() * M_PI / 180.0);
+  return std::cos(a.getValue() * M_PI / 180.0);
 }
 
 double sin(const Angle & a){
-  return sin(a.getValue() * M_PI / 180.0);
+  return std::sin(a.getValue() * M_PI / 180.0);
 }
 
 double tan(const Angle & a){
-  return tan(a.getValue() * M_PI / 180.0);
+  return std::tan(a.getValue() * M_PI / 180.0);
 }
 
 double deg2rad(double degreeAngle){
