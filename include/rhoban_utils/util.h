@@ -16,12 +16,13 @@
 #include <stdexcept>
 #include <ctime>
 
+namespace rhoban_utils
+{
+
 typedef unsigned char ui8;
 typedef unsigned short ui16;
 typedef unsigned int ui32;
 typedef unsigned int uint;
-
-using namespace std;
 
 /**
  * Return the content of the whole file 'effectively'
@@ -31,10 +32,10 @@ std::string slurpFile(const std::string& path);
 
 std::string to_string(double val, int precision);
 
-bool is_in_vector_string(vector<string> vector, string testval);
+bool is_in_vector_string(std::vector<std::string> vector, std::string testval);
 
-template <typename T>
-bool is_in(vector<T> lst, T x) {
+template <typename T> bool is_in(std::vector<T> lst, T x)
+{
     for (int i=0; i < (int) lst.size(); i++)
         if (x==lst[i]) return true;
     return false;
@@ -42,20 +43,20 @@ bool is_in(vector<T> lst, T x) {
 
 /* extract the subvector of lst regarding indexes [i0,i1] included */
 template <typename T>
-vector<T> v_extract_subvector(vector<T> & lst, int i0, int i1) {
-    vector<T> result;
-    if (i0 < 0 || i1 < 0 || 
-            i0 > ((int) lst.size()-1) ||
-            i1 > ((int) lst.size()-1) ||
-            i0 > i1) return result;
-    return vector<T>(lst.begin() + i0, lst.begin() + i1);
+std::vector<T> v_extract_subvector(std::vector<T> & lst, int i0, int i1) {
+  std::vector<T> result;
+  if (i0 < 0 || i1 < 0 || 
+      i0 > ((int) lst.size()-1) ||
+      i1 > ((int) lst.size()-1) ||
+      i0 > i1) return result;
+  return std::vector<T>(lst.begin() + i0, lst.begin() + i1);
 }
 
-inline string my_itoa(int i)
+ inline std::string my_itoa(int i)
 {
-    ostringstream os;
-    os << i;
-    return os.str();
+  std::ostringstream os;
+  os << i;
+  return os.str();
 }
 
 int char_to_int(char c);
@@ -84,12 +85,13 @@ int string_to_int(char * argv);
 #define check_opt(option) (argc>1 && strcmp(argv[1], option)==0)
 /*****************************************************************************/
 
-int is_parameter(string param_name, int argc, char * argv[]);
-pair<bool,string> get_parameter(string param_name, int argc, char * argv[]);
-pair<bool,int> get_int_parameter(string param_name, int argc, char * argv[]);
-bool get_int_parameter(string param_name, int * arg1, int argc, char * argv[]);
-bool get_int_int_parameter(string param_name, int * arg1, int * arg2, int argc, char * argv[]);
-bool get_int_int_int_parameter(string param_name, int * arg1, int * arg2, int * arg3, int argc, char * argv[]);
+// TODO: check if it is dead code
+//int is_parameter(string param_name, int argc, char * argv[]);
+//pair<bool,string> get_parameter(string param_name, int argc, char * argv[]);
+//pair<bool,int> get_int_parameter(string param_name, int argc, char * argv[]);
+//bool get_int_parameter(string param_name, int * arg1, int argc, char * argv[]);
+//bool get_int_int_parameter(string param_name, int * arg1, int * arg2, int argc, char * argv[]);
+//bool get_int_int_int_parameter(string param_name, int * arg1, int * arg2, int * arg3, int argc, char * argv[]);
 
 /*****************************************************************************/
 /*! \name Tools (\todo: to be put anywhere else !
@@ -121,12 +123,14 @@ std::list<T> vector_to_list(std::vector<T> & V) {
     return L;
 }
 
-vector<string> &split(const string &s, char delim, vector<string> &elems);
-list<string> &split_list(const string &s, char delim, list<string> &elems);
+std::vector<std::string> &split(const std::string &s, char delim,
+				std::vector<std::string> &elems);
+std::list<std::string> &split_list(const std::string &s, char delim,
+				   std::list<std::string> &elems);
 
 template<typename T>
-inline string join(const T &tab, string delimiter) {
-    ostringstream oss;
+inline std::string join(const T &tab, std::string delimiter) {
+    std::ostringstream oss;
     typename T::const_iterator it; 
 
     bool notOver;
@@ -143,13 +147,13 @@ inline string join(const T &tab, string delimiter) {
     return oss.str();
 }
 
-string system_time();
+std::string system_time();
 
 bool endsWith(std::string const &fullString, std::string const &ending);
 
-vector<string> getLines(const string &header);
+std::vector<std::string> getLines(const std::string &header);
 
-string today();
+std::string today();
 
 std::string camelize(std::string input);
 
@@ -160,3 +164,14 @@ void replaceAll(std::string& str, const std::string& from, const std::string& to
 bool strContains(const std::string &str, const std::string &other);
 
 bool file_exists (const std::string& name);
+
+/// Return the name of the file at the given path:
+/// e.g getBaseName("toto/file.cpp") returns "file.cpp"
+std::string getBaseName(const std::string & path);
+
+/// Return the name of the path to the directory containing the given file:
+/// e.g getDirName("toto/file.cpp") returns "toto"
+/// Remark: getDirName("file.cpp") returns "./"
+std::string getDirName(const std::string & path);
+
+}

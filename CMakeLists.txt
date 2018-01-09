@@ -29,6 +29,7 @@ set(SOURCES_DIRECTORIES
   src/rhoban_utils/history
   src/rhoban_utils/logging
   src/rhoban_utils/nominal
+  src/rhoban_utils/serialization
   src/rhoban_utils/sockets
   src/rhoban_utils/spline
   src/rhoban_utils/threading

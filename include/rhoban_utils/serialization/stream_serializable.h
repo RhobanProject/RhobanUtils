@@ -3,7 +3,7 @@
 #include <istream>
 #include <ostream>
 
-namespace rosban_utils
+namespace rhoban_utils
 {
 
 /// This class is used to serialize objects into binary streams

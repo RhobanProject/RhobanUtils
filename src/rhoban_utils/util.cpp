@@ -23,6 +23,9 @@
 
 using namespace std;
 
+namespace rhoban_utils
+{
+
 std::string slurpFile(const std::string& path)
 {
   std::ifstream in(path, std::ios::in | std::ios::binary);
@@ -41,7 +44,7 @@ std::string slurpFile(const std::string& path)
 
 std::string to_string(double val, int precision)
 {
-  ostringstream oss;
+  std::ostringstream oss;
   oss << setprecision(precision) << val;
   return oss.str();
 }
@@ -306,3 +309,22 @@ bool file_exists (const std::string& name) {
     return (stat (name.c_str(), &buffer) == 0); 
 }
 
+std::string getBaseName(const std::string & path)
+{
+  std::vector<std::string> elems;
+  split(path,'/',elems);
+  return elems[elems.size() - 1];
+}
+
+std::string getDirName(const std::string & path)
+{
+  std::vector<std::string> elems;
+  split(path,'/',elems);
+  std::ostringstream oss;
+  for (size_t idx = 0; idx < elems.size() - 1; idx++) {
+    oss << elems[idx] << "/";
+  }
+  return oss.str();
+}
+
+}
