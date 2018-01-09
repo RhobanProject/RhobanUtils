@@ -320,6 +320,13 @@ std::string getDirName(const std::string & path)
 {
   std::vector<std::string> elems;
   split(path,'/',elems);
+  // If there is no prefix, return "./"
+  if (elems.size() < 2) {
+    return "./";
+  }
+  // Otherwise, concatenate elements  // If there 
+  if (elems.size() < 2) return "./";
+
   std::ostringstream oss;
   for (size_t idx = 0; idx < elems.size() - 1; idx++) {
     oss << elems[idx] << "/";

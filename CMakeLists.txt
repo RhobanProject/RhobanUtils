@@ -16,6 +16,8 @@ catkin_package(
 
 include_directories(include ${catkin_INCLUDE_DIRS})
 
+option(RHOBAN_UTILS_BUILD_EXAMPLES "Building examples" OFF)
+
 #Enable C++11
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wextra")
 
@@ -52,3 +54,7 @@ endforeach (DIRECTORY)
 add_library (rhoban_utils ${ALL_SOURCES})
 target_link_libraries(rhoban_utils ${catkin_LIBRARIES} Threads::Threads)
 
+if (RHOBAN_UTILS_BUILD_EXAMPLES)
+  add_executable(json_serialization_example examples/json_serialization.cpp)
+  target_link_libraries(json_serialization_example rhoban_utils ${catkin_LIBRARIES} Threads::Threads)
+endif()
