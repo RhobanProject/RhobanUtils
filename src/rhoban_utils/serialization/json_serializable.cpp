@@ -8,6 +8,11 @@
 namespace rhoban_utils
 {
 
+JsonParsingError::JsonParsingError(const std::string & what_arg)
+  : std::runtime_error(what_arg)
+{
+}
+
 JsonSerializable::JsonSerializable()
 {
 }
@@ -27,7 +32,7 @@ void JsonSerializable::loadFile(const std::string & file_path)
 }
 
 void JsonSerializable::loadFile(const std::string & json_file,
-				const std::string & dir_path)
+                                const std::string & dir_path)
 {
   if (dir_path[dir_path.size()-1] != '/') {
     throw std::logic_error("JsonSerializable::loadFile: dir_path should end by a '/', received : '" + dir_path + "'");
@@ -49,20 +54,33 @@ void JsonSerializable::loadFile(const std::string & json_file,
   fromJson(json_content,dir_path);
 }
 
-void JsonSerializable::saveFile()
+void JsonSerializable::saveFile() const
 {
   saveFile(getClassName() + ".json");
 }
 
-void JsonSerializable::saveFile(const std::string &path)
+void JsonSerializable::saveFile(const std::string &path, bool factory_style) const
 {
   // Json Writing
   Json::StyledWriter writer;
-  std::string content = writer.write(toJson());
+  Json::Value content;
+  if (factory_style) {
+    content = toFactoryJson();
+  } else {
+    content = toJson();
+  }
   // Prepare output stream
   //TODO: error treatment
   std::ofstream output(path);
-  output << content;
+  output << writer.write(content);
+}
+
+Json::Value JsonSerializable::toFactoryJson() const
+{
+  Json::Value v(Json::ValueType::objectValue);
+  v["class name"] = getClassName();
+  v["content"] = toJson();
+  return v;
 }
 
 //void JsonSerializable::write(const std::string & key, std::ostream & out) const

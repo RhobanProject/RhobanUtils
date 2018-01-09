@@ -53,7 +53,7 @@ public:
   std::string s_value;
 };
 
-int main(int argc, char ** argv)
+int main()
 {
   Mother m;
   m.c.int_value = 3;

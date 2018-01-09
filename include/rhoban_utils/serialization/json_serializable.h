@@ -2,12 +2,23 @@
 
 #include <json/json.h>
 
+#include <exception>
+
 namespace rhoban_utils
 {
+
+class JsonParsingError : public std::runtime_error
+{
+public:
+  JsonParsingError(const std::string & what_arg);
+};
 
 class JsonSerializable
 {
 public:
+  JsonSerializable();
+  virtual ~JsonSerializable();
+
   virtual std::string getClassName() const = 0;
   
   /// loads the object from the default file
@@ -21,20 +32,24 @@ public:
   /// possibility to use relative_path (from dir_path)
   /// dir_path should end by a "/"
   void loadFile(const std::string & json_file,
-		const std::string & dir_path);
+                const std::string & dir_path);
 
   /// Serializes and saves to a file using default filename
-  void saveFile();
+  void saveFile() const;
 
   /// Serializes and saves to a file using given filename
-  void saveFile(const std::string &filename);
+  /// if factory_style is true, uses toFactoryJson (allows choosing type during loading)
+  void saveFile(const std::string &filename, bool factory_style = false) const;
 
   /// Deserializes from a json content found in 'dir_name'
   virtual void fromJson(const Json::Value & json_value,
-			const std::string & dir_name) = 0;
+                        const std::string & dir_name) = 0;
 
-  // Append xml to the given stream
+  /// Represent current object as a Json::Value
   virtual Json::Value toJson() const = 0;
+
+  /// Represent current object as a Json::Value containing information on class for factories
+  Json::Value toFactoryJson() const;
 
   // TODO: check if this part is still necessary
 //  /// Write in the given stream the serializable object inside a node with the given key
@@ -58,10 +73,6 @@ public:
 //  /*! pretty print */
 //  void pretty_print() const;
 
-protected:
-  JsonSerializable();
-
-  virtual ~JsonSerializable();
 };
 
 }
