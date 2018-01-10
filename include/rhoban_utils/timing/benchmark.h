@@ -1,5 +1,7 @@
 #pragma once
 
+#include "rhoban_utils/timing/time_stamp.h"
+
 #include <chrono>
 #include <map>
 #include <string>
@@ -18,8 +20,6 @@ namespace rhoban_utils {
       /* Static variables */
       static Benchmark * current;
 
-      // typedefs
-      typedef std::chrono::time_point<std::chrono::steady_clock> TimeStamp;
       /* Local variables */
       Benchmark * father;
       std::string name;
