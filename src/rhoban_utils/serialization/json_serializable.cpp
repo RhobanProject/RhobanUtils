@@ -83,6 +83,28 @@ Json::Value JsonSerializable::toFactoryJson() const
   return v;
 }
 
+static void checkMember(const Json::Value & v, const std::string & key)
+{
+  if (!v.isObject() || !v.isMember(key)){
+    throw JsonParsingError("Could not find member '" + key + "'");
+  }
+}
+
+void JsonSerializable::read(const Json::Value & v, const std::string & key, const std::string & dir_name)
+{
+  checkMember(v,key);
+  fromJson(v[key],dir_name);
+}
+
+void JsonSerializable::tryRead(const Json::Value & v, const std::string & key, const std::string & dir_name)
+{
+  if (!v.isObject() || !v.isMember(key)){
+    return;
+  }
+  read(v,key,dir_name); 
+}
+
+
 //void JsonSerializable::write(const std::string & key, std::ostream & out) const
 //{
 //  out << "<" << key << ">" << to_xml() << "</" << key << ">";
@@ -129,5 +151,42 @@ Json::Value JsonSerializable::toFactoryJson() const
 //  std::cout << std::endl;
 //  delete doc;
 //}
+
+template <> bool read<bool>(const Json::Value & v, const std::string & key)
+{
+  checkMember(v,key);
+  if (!v[key].isBool()) {
+    throw JsonParsingError("Expecting a bool for '" + key + "'");
+  }
+  return v[key].asBool(); 
+}
+
+template <> int read<int>(const Json::Value & v, const std::string & key)
+{
+  checkMember(v,key);
+  if (!v[key].isInt()) {
+    throw JsonParsingError("Expecting an int for '" + key + "'");
+  }
+  return v[key].asInt(); 
+}
+
+template <> double read<double>(const Json::Value & v, const std::string & key)
+{
+  checkMember(v,key);
+  if (!v[key].isDouble()) {
+    throw JsonParsingError("Expecting a double for '" + key + "'");
+  }
+  return v[key].asDouble(); 
+}
+
+template <> std::string read<std::string>(const Json::Value & v, const std::string & key)
+{
+  checkMember(v,key);
+  if (!v[key].isString()) {
+    throw JsonParsingError("Expecting a bool for '" + key + "'");
+  }
+  return v[key].asString(); 
+}
+
 
 }

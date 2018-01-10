@@ -12,8 +12,8 @@ public:
 		const std::string & dir_name) override
   {
     (void) dir_name;
-    int_value = json_value["int_value"].asInt();
-    double_value = json_value["double_value"].asDouble();
+    int_value    = rhoban_utils::read<int>(json_value, "int_value");
+    double_value = rhoban_utils::read<double>(json_value,"double_value");
   }
   
   Json::Value toJson() const override
@@ -35,10 +35,11 @@ public:
   std::string getClassName() const { return "Mother";};
 
   void fromJson(const Json::Value & json_value,
-		const std::string & dir_name) override
+                const std::string & dir_name) override
   {
-    s_value = json_value["s_value"].asString();
-    c.fromJson(json_value["children"],dir_name);
+    (void)dir_name;
+    s_value = rhoban_utils::read<std::string>(json_value,"s_value");
+    c.read(json_value,"children");
   }
 
   Json::Value toJson() const override

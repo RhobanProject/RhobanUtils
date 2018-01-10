@@ -51,6 +51,15 @@ public:
   /// Represent current object as a Json::Value containing information on class for factories
   Json::Value toFactoryJson() const;
 
+  
+  /// Read the content of the object if v[key] exists
+  /// Otherwise: throws a JsonParsingError
+  void read(const Json::Value & v, const std::string & key, const std::string & dir_name = "./");
+  /// Read the content of the object if v[key] exists
+  /// Do not throw an exception if v[key] is not defined
+  /// Still throws an exception if v[key] exists with an invalid content
+  void tryRead(const Json::Value & v, const std::string & key, const std::string & dir_name = "./");
+
   // TODO: check if this part is still necessary
 //  /// Write in the given stream the serializable object inside a node with the given key
 //  void write(const std::string & key, std::ostream & out) const;
@@ -74,5 +83,26 @@ public:
 //  void pretty_print() const;
 
 };
+
+/// Return an object of type 'T' if v[key] exists and is of type 'T'.
+/// Otherwise: throws a JsonParsingError
+template <typename T> T read(const Json::Value & v, const std::string & key);
+
+template <> bool        read<bool>       (const Json::Value & v, const std::string & key);
+template <> int         read<int>        (const Json::Value & v, const std::string & key);
+template <> double      read<double>     (const Json::Value & v, const std::string & key);
+template <> std::string read<std::string>(const Json::Value & v, const std::string & key);
+  
+/// - if v[key] exists and has type 'T', write the value in ptr
+/// - if v[key] does not exist, do not modify ptr
+/// - if v[key] exists but has inappropriate type, throws a JsonParsingError
+template <typename T>
+static void tryRead(const Json::Value & v, const std::string & key, T * ptr)
+{
+  if (v.isObject() && v.isMember(key)) {
+    *ptr = read<T>(v, key);
+  }
+}
+
 
 }

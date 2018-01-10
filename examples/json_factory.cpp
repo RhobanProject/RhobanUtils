@@ -21,8 +21,8 @@ public:
                 const std::string & dir_name) override
   {
     (void) dir_name;
-    int_value = json_value["int_value"].asInt();
-    double_value = json_value["double_value"].asDouble();
+    int_value    = rhoban_utils::read<int>   (json_value,"int_value"   );
+    double_value = rhoban_utils::read<double>(json_value,"double_value");
   }
   
   Json::Value toJson() const override
@@ -47,7 +47,7 @@ public:
                 const std::string & dir_name) override
   {
     (void) dir_name;
-    s_value = json_value["s_value"].asString();
+    s_value = rhoban_utils::read<std::string>(json_value,"s_value");
   }
   
   Json::Value toJson() const override
