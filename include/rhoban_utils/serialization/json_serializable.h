@@ -84,24 +84,70 @@ public:
 
 };
 
+/// Throws a JsonParsingError if v[key] does not exist
+void checkMember(const Json::Value & v, const std::string & key);
+
+/// Throws a JsonParsingError if 'v' is not of type 'T'
+template <typename T> T getJsonVal(const Json::Value & v);
+
+template <> bool        getJsonVal<bool>       (const Json::Value & v);
+template <> int         getJsonVal<int>        (const Json::Value & v);
+template <> double      getJsonVal<double>     (const Json::Value & v);
+template <> std::string getJsonVal<std::string>(const Json::Value & v);
+
 /// Return an object of type 'T' if v[key] exists and is of type 'T'.
 /// Otherwise: throws a JsonParsingError
-template <typename T> T read(const Json::Value & v, const std::string & key);
-
-template <> bool        read<bool>       (const Json::Value & v, const std::string & key);
-template <> int         read<int>        (const Json::Value & v, const std::string & key);
-template <> double      read<double>     (const Json::Value & v, const std::string & key);
-template <> std::string read<std::string>(const Json::Value & v, const std::string & key);
+template <typename T> T read(const Json::Value & v, const std::string & key)
+{
+  checkMember(v,key);
+  try {
+    return getJsonVal<T>(v[key]);
+  } catch (const JsonParsingError & error) {
+    throw JsonParsingError(error.what() + std::string(" at '") + key + "'");   
+  }
+}
   
 /// - if v[key] exists and has type 'T', write the value in ptr
 /// - if v[key] does not exist, do not modify ptr
 /// - if v[key] exists but has inappropriate type, throws a JsonParsingError
 template <typename T>
-static void tryRead(const Json::Value & v, const std::string & key, T * ptr)
+void tryRead(const Json::Value & v, const std::string & key, T * ptr)
 {
   if (v.isObject() && v.isMember(key)) {
     *ptr = read<T>(v, key);
   }
+}
+
+template <typename T>
+std::vector<T> readVector(const Json::Value & v, const std::string & key)
+{
+  checkMember(v,key);
+  if (!v[key].isArray()) {
+    throw JsonParsingError("Value at '" + key + "' is not an array");
+  }
+  std::vector<T> result;
+  for (Json::ArrayIndex idx=0; idx < v[key].size();idx++) {
+    result.push_back(getJsonVal<T>(v[key][idx]));
+  }
+  return result;
+}
+
+template <typename T>
+void tryReadVector(const Json::Value & v, const std::string & key, std::vector<T> * ptr)
+{
+  if (v.isObject() && v.isMember(key)) {
+    *ptr = readVector<T>(v, key);
+  }
+}
+
+template <typename T>
+static Json::Value vector2Json(const std::vector<T> & values)
+{
+  Json::Value v;
+  for (Json::ArrayIndex idx = 0; idx < values.size(); idx++) {
+    v[idx] = values[idx];
+  }
+  return v;
 }
 
 

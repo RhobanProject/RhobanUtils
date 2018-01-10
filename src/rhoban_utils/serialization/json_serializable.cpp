@@ -83,13 +83,6 @@ Json::Value JsonSerializable::toFactoryJson() const
   return v;
 }
 
-static void checkMember(const Json::Value & v, const std::string & key)
-{
-  if (!v.isObject() || !v.isMember(key)){
-    throw JsonParsingError("Could not find member '" + key + "'");
-  }
-}
-
 void JsonSerializable::read(const Json::Value & v, const std::string & key, const std::string & dir_name)
 {
   checkMember(v,key);
@@ -152,40 +145,43 @@ void JsonSerializable::tryRead(const Json::Value & v, const std::string & key, c
 //  delete doc;
 //}
 
-template <> bool read<bool>(const Json::Value & v, const std::string & key)
+void checkMember(const Json::Value & v, const std::string & key)
 {
-  checkMember(v,key);
-  if (!v[key].isBool()) {
-    throw JsonParsingError("Expecting a bool for '" + key + "'");
+  if (!v.isObject() || !v.isMember(key)){
+    throw JsonParsingError("Could not find member '" + key + "'");
   }
-  return v[key].asBool(); 
 }
 
-template <> int read<int>(const Json::Value & v, const std::string & key)
+template <> bool getJsonVal<bool>(const Json::Value & v)
 {
-  checkMember(v,key);
-  if (!v[key].isInt()) {
-    throw JsonParsingError("Expecting an int for '" + key + "'");
+  if (!v.isBool()) {
+    throw JsonParsingError("Expecting a bool");
   }
-  return v[key].asInt(); 
+  return v.asBool(); 
 }
 
-template <> double read<double>(const Json::Value & v, const std::string & key)
+template <> int getJsonVal<int>(const Json::Value & v)
 {
-  checkMember(v,key);
-  if (!v[key].isDouble()) {
-    throw JsonParsingError("Expecting a double for '" + key + "'");
+  if (!v.isInt()) {
+    throw JsonParsingError("Expecting an int");
   }
-  return v[key].asDouble(); 
+  return v.asInt(); 
 }
 
-template <> std::string read<std::string>(const Json::Value & v, const std::string & key)
+template <> double getJsonVal<double>(const Json::Value & v)
 {
-  checkMember(v,key);
-  if (!v[key].isString()) {
-    throw JsonParsingError("Expecting a bool for '" + key + "'");
+  if (!v.isDouble()) {
+    throw JsonParsingError("Expecting a double");
   }
-  return v[key].asString(); 
+  return v.asDouble(); 
+}
+
+template <> std::string getJsonVal<std::string>(const Json::Value & v)
+{
+  if (!v.isString()) {
+    throw JsonParsingError("Expecting a string");
+  }
+  return v.asString(); 
 }
 
 
