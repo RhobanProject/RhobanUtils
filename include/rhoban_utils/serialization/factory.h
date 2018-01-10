@@ -176,7 +176,7 @@ public:
   /// - 'ptr' is overwritten (and thus, old value is deleted according to unique_ptr)
   void tryRead(const Json::Value & value,
                const std::string & key, const std::string & dir_path,
-               std::unique_ptr<T> & ptr)
+               std::unique_ptr<T> * ptr)
     {
       if (!value.isObject()){
         return;
@@ -184,7 +184,7 @@ public:
       if (!value.isMember(key)){
         return;
       }
-      ptr = build(value[key], dir_path);
+      *ptr = build(value[key], dir_path);
     }
 
   std::vector<std::unique_ptr<T>> readVector(const Json::Value & value,

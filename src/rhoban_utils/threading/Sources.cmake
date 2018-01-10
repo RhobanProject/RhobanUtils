@@ -1,6 +1,6 @@
-
 set (SOURCES
-    condition.cpp
-    mutex.cpp 
-    thread.cpp
-    )
+  condition.cpp
+  multi_core.cpp
+  mutex.cpp
+  thread.cpp
+  )
