@@ -2,6 +2,8 @@
 
 #include <json/json.h>
 
+#include <Eigen/Core>
+
 #include <exception>
 
 namespace rhoban_utils
@@ -150,5 +152,8 @@ static Json::Value vector2Json(const std::vector<T> & values)
   return v;
 }
 
+Json::Value matrix2Json(const Eigen::MatrixXd & m);
+
+template <> Eigen::MatrixXd getJsonVal<Eigen::MatrixXd>(const Json::Value & v);
 
 }

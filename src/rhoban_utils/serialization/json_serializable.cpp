@@ -184,5 +184,51 @@ template <> std::string getJsonVal<std::string>(const Json::Value & v)
   return v.asString(); 
 }
 
+Json::Value matrix2Json(const Eigen::MatrixXd & m)
+{
+  Json::Value v;
+  v["rows"] = (int)m.rows();
+  v["cols"] = (int)m.cols();
+  for (int row = 0; row < m.rows(); row++) {
+    Json::Value row_data;
+    for (int col = 0; col < m.cols(); col++) {
+      row_data.append(m(row,col));
+    }
+    v["values"].append(row_data);
+  }
+  return v;        
+}
+
+template <> Eigen::MatrixXd getJsonVal<Eigen::MatrixXd>(const Json::Value & v)
+{
+  if (!v.isObject()) {
+    throw JsonParsingError("getJsonVal<Eigen::MatrixXd>: Expecting an object");
+  }
+  size_t rows = read<int>(v,"rows");
+  size_t cols = read<int>(v,"cols");
+  checkMember(v,"values");
+  const Json::Value values = v["values"];
+  if (!values.isArray()){
+    throw JsonParsingError("getJsonVal<Eigen::MatrixXd>: Expecting an array for 'values'");
+  }
+  if (values.size() != rows) {
+    throw JsonParsingError("getJsonVal<Eigen::MatrixXd>: Inconsistency in rows numbers");
+  }
+  Eigen::MatrixXd m(rows,cols);
+  for (Json::ArrayIndex row = 0; row < rows; row++) {
+    const Json::Value & row_value = values[row];
+    if (!row_value.isArray()) {
+      throw JsonParsingError("getJsonVal<Eigen::MatrixXd>: Expecting an array for row");
+    }
+    if (row_value.size() != cols) {
+      throw JsonParsingError("getJsonVal<Eigen::MatrixXd>: Inconsistency for cols");
+    }
+    for (Json::ArrayIndex col = 0; col < cols; col++) {
+      m(row,col) = getJsonVal<double>(row_value[col]);
+    }
+  }
+  return m;
+}
+
 
 }
