@@ -14,10 +14,6 @@
 
 namespace rhoban_utils
 {
-
-// TODO:
-// - Add write options eventually (issues with guarantees of const, maybe only for shared_ptr)
-
 /// This class implements a factory pattern. It can be used for producing
 /// various objects inheriting from class T. More specific initialization can be
 /// achieved by using data from a Json::Value

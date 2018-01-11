@@ -152,8 +152,82 @@ static Json::Value vector2Json(const std::vector<T> & values)
   return v;
 }
 
+Json::Value vector2Json(const Eigen::VectorXd & v);
 Json::Value matrix2Json(const Eigen::MatrixXd & m);
 
+template <> Eigen::VectorXd getJsonVal<Eigen::VectorXd>(const Json::Value & v);
 template <> Eigen::MatrixXd getJsonVal<Eigen::MatrixXd>(const Json::Value & v);
+
+template <typename T>
+std::vector<T> readVector(const Json::Value & v,
+                          const std::string & dir_name,
+                          std::function<T(const Json::Value & v,
+                                          const std::string & dir_name)> builder)
+{
+  if (!v.isArray()) {
+    throw JsonParsingError("readVector:: Expecting an array");
+  }
+  std::vector<T> result;
+  for (Json::ArrayIndex idx = 0; idx < v.size(); idx++){
+    result.push_back(builder(v[idx],dir_name));
+  }
+  return result;
+}
+
+template <typename T>
+std::vector<T> readVector(const Json::Value & v,
+                          const std::string & vec_name,
+                          const std::string & dir_name,
+                          std::function<T(const Json::Value & v, const std::string & dir_name)> builder)
+{
+  checkMember(v,vec_name);
+  return readVector(v[vec_name], dir_name, builder);
+}
+
+template <typename T>
+void tryReadVector(const Json::Value & v,
+                   const std::string & vec_name,
+                   const std::string & dir_name,
+                   std::function<T(const Json::Value & v,
+                                   const std::string & dir_name)> builder,
+                   std::vector<T> * ptr)
+{
+  if (v.isObject() && v.isMember(vec_name)) {
+    *ptr = readVector(v, vec_name, dir_name, builder);
+  }
+}
+
+
+/// Read a map which has the following structure using the given builder
+/// {
+///   "key" : "value",
+///   ...
+/// }
+template <typename T>
+std::map<std::string,T> readMap(const Json::Value & v,
+                                const std::string & dir_name,
+                                std::function<T(const Json::Value & v, const std::string & dir_name)> builder)
+{
+  if (!v.isObject()) {
+    throw JsonParsingError("readMap:: Expecting an object");
+  }
+  // Parse entries:
+  std::map<std::string, T> result;
+  for (Json::ValueConstIterator it = v.begin(); it != v.end(); it++) {
+    std::string key = it.name();
+    result[key] = builder(v[key], dir_name);
+  }
+  return result;
+}
+
+template <typename T>
+std::map<std::string,T> readMap(const Json::Value & v,
+                                const std::string & map_name,
+                                const std::string & dir_name,
+                                std::function<T(const Json::Value & v, const std::string & dir_name)> builder)
+{
+  checkMember(v,map_name);
+  return readMap(v[map_name], dir_name, builder);
+}
 
 }
