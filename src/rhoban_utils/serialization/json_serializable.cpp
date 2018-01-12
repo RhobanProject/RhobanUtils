@@ -51,7 +51,13 @@ void JsonSerializable::loadFile(const std::string & json_file,
   // TODO: treat errors properly
   Json::Value json_content;
   reader.parse(data, json_content);
-  fromJson(json_content,dir_path);
+  try {
+    std::cout << "Reading : '" << json_file << "'" << std::endl;
+    fromJson(json_content,dir_path);
+  } catch (const JsonParsingError & exc) {
+    throw JsonParsingError(std::string(exc.what()) + " while reading '" +
+                           json_file + "' in '" + dir_path + "'");
+  }
 }
 
 void JsonSerializable::saveFile() const
@@ -86,7 +92,11 @@ Json::Value JsonSerializable::toFactoryJson() const
 void JsonSerializable::read(const Json::Value & v, const std::string & key, const std::string & dir_name)
 {
   checkMember(v,key);
-  fromJson(v[key],dir_name);
+  try{
+    fromJson(v[key],dir_name);
+  } catch(const JsonParsingError & exc) {
+    throw JsonParsingError(std::string(exc.what()) + " in " + key);
+  }
 }
 
 void JsonSerializable::tryRead(const Json::Value & v, const std::string & key, const std::string & dir_name)

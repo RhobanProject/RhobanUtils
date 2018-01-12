@@ -118,7 +118,13 @@ public:
       if (!v.isMember("content")) {
         throw JsonParsingError("Factory::build: no 'content' found");
       }
-      return getBuilder(class_name)(v["content"],dir_path);
+      std::unique_ptr<T> obj;
+      try{
+        obj = getBuilder(class_name)(v["content"],dir_path);
+      } catch (const JsonParsingError & exc) {
+        throw JsonParsingError(std::string(exc.what()) + " in 'content'");
+      }
+      return obj;
     }
 
   std::unique_ptr<T> build(int id) const
@@ -145,7 +151,14 @@ public:
       reader.parse(data, json_content);
       /// Build:
       std::string dir_path = getDirName(path);
-      return build(json_content, dir_path);
+      std::unique_ptr<T> obj;
+      try {
+        obj = build(json_content, dir_path);
+      } catch (const JsonParsingError & exc) {
+        throw JsonParsingError(std::string(exc.what()) +
+                               " when building from file '" + path + "'");
+      }
+      return obj;
     }
 
   /// Throw a JsonParsingError, if value is not an object containing the given key,
@@ -160,7 +173,13 @@ public:
       if (!value.isMember(key)) {
         throw JsonParsingError("Could not find member '" + key + "'");
       }
-      return build(value[key], dir_path);
+      std::unique_ptr<T> obj;
+      try {
+        obj = build(value[key], dir_path);
+      } catch (const JsonParsingError & exc) {
+        throw JsonParsingError(std::string(exc.what()) + " in '" + key + "'");
+      }
+      return obj;
     }
 
   /// Fill 'ptr' with a generated object with the given value as argument
