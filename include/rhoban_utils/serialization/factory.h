@@ -90,8 +90,13 @@ public:
     }
 
   /// When building from a node, the expected format of the json is the following:
-  /// "class name" : <object type> ,
-  /// "content:" : ...
+  /// - String initialization
+  ///   - "class name" : <object type> ,
+  ///   - "content:" : ...
+  /// or absolute path initialization:
+  ///   - "abs path" : ...
+  /// or relative path initializaion:
+  ///   - "rel path" : ...
   std::unique_ptr<T> build(const Json::Value & v,
                            const std::string & dir_path = "./") const
     {
@@ -102,17 +107,30 @@ public:
       if (! v.isObject()) {
         throw JsonParsingError("Factory::build: Trying to build from a non-object value");
       }
-      // Getting class name
-      std::string class_name;
-      if (v.isMember("class name")) {
-        const Json::Value & class_value = v["class name"];
-        if (class_value.isString()) {
-          class_name = class_value.asString();
-        } else {
-          throw JsonParsingError("Factory::build: class name does not contain a string");
-        }
-      } else {
-        throw JsonParsingError("Factory::build: no class name found");
+      // Trying the three possible ways to read the document
+      std::string abs_path, rel_path, class_name;
+      rhoban_utils::tryRead(v,"abs path"  , &abs_path);
+      rhoban_utils::tryRead(v,"rel path"  , &rel_path);
+      rhoban_utils::tryRead(v,"class name", &class_name);
+      // Treating cases where multiple or no methods have been provided
+      std::string file_path;
+      if (abs_path != "" && rel_path != "") {
+          throw JsonParsingError("Factory::build: two paths provided for initialization");
+      } else if (abs_path != "") {
+        file_path = abs_path;
+      } else if (rel_path != "") {
+        file_path = dir_path + rel_path;
+      }
+      //
+      if (class_name != "" && file_path != "") {
+        throw JsonParsingError("Factory::build: 'path' and 'class name' are incompatible");
+      }
+      if (class_name == "" && file_path == "") {
+        throw JsonParsingError("Factory::build: requiring 'abs path', 'rel path' or 'class name'");
+      }
+      // Initializing and throwing error if two methods are provided
+      if (file_path != "") {
+        return buildFromJsonFile(file_path);
       }
       // Getting content
       if (!v.isMember("content")) {
@@ -263,7 +281,7 @@ public:
       if (!in) {
         std::ostringstream oss;
         oss << "Failed to open '" << filename << "' for binary reading";
-        throw std::runtime_error(oss.str());
+        throw JsonParsingError(oss.str());
       }
       int bytes_read = read(in, ptr);
       in.close();
