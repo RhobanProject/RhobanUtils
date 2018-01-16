@@ -39,7 +39,7 @@ std::string slurpFile(const std::string& path)
     in.close();
     return(contents);
   }
-  throw std::runtime_error("Failed to open file '" + path + "'");
+  throw std::runtime_error("rhoban_utils::slurpFile: Failed to open file '" + path + "'");
 }
 
 std::string to_string(double val, int precision)

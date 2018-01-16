@@ -21,7 +21,7 @@ std::string file2string(const std::string &path)
     in.close();
     return contents;
   }
-  throw std::runtime_error("Failed to open file '" + path + "'");
+  throw std::runtime_error("rhoban_utils::file2string: Failed to open file '" + path + "'");
 }
 
 int writeInt(std::ostream & out, int val)

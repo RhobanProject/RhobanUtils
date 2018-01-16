@@ -43,7 +43,7 @@ public:
         std::ostringstream oss;
         oss << "Factory: type '" << class_name << "' is not registered" << std::endl;
         listBuilders(oss);
-        throw std::out_of_range(oss.str()); 
+        throw JsonParsingError(oss.str()); 
       }
     }
 
@@ -154,7 +154,12 @@ public:
   std::unique_ptr<T> buildFromJsonFile(const std::string &path) const
     {
       // Read data
-      std::string data = file2string(path);
+      std::string data;
+      try {
+        data = file2string(path);
+      } catch (const std::runtime_error & exc) {
+        throw JsonParsingError(exc.what());
+      }
       // Create Json reader
       // TODO: investigate all the flags
       auto f=Json::Features::all();
