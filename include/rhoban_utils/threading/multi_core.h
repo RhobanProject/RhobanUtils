@@ -19,7 +19,7 @@ public:
                              int end_idx,
                              std::default_random_engine * engine)> StochasticTask;
   
-
+  /// If nb_tasks is lower than nb_threads, return only a 'nb_task' sized vector
   static Intervals buildIntervals(int nb_tasks, int nb_threads);
 
   /// Can be used when a function 'f' needs to be run for all values in [0,nb_tasks[
