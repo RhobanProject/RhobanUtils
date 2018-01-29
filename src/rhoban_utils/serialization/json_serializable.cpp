@@ -107,54 +107,6 @@ void JsonSerializable::tryRead(const Json::Value & v, const std::string & key, c
   read(v,key,dir_name); 
 }
 
-
-//void JsonSerializable::write(const std::string & key, std::ostream & out) const
-//{
-//  out << "<" << key << ">" << to_xml() << "</" << key << ">";
-//}
-//
-//void JsonSerializable::factoryWrite(const std::string & key, std::ostream & out) const
-//{
-//  out << "<" << key << ">";
-//  write(class_name(), out);
-//  out << "</" << key << ">";
-//}
-//
-//void JsonSerializable::read(TiXmlNode *node, const std::string & key)
-//{
-//  if(!node) throw XMLParsingError("Null node when trying to read an object");
-//  TiXmlNode* child = node->FirstChild(key);
-//  if (!child) throw XMLParsingError("No node named '" + key + "' in node '"
-//                                    + node->Value() + "'");
-//  from_xml(child);
-//}
-//
-//void JsonSerializable::tryRead(TiXmlNode *node, const std::string &key)
-//{
-//  if(!node) throw XMLParsingError("Null node when trying to read an object");
-//
-//  TiXmlNode* child = node->FirstChild(key);
-//  if (!child) return;
-//
-//  from_xml(child);
-//}
-//    
-//
-//void JsonSerializable::pretty_print() const
-//{
-//  TiXmlDocument * doc = xml_tools::string_to_doc(to_xml_stream());
-//  if(!doc)
-//  {
-//    std::cout << " Failed to turn object to xml doc" << std::endl;
-//    return;
-//  }
-//
-//  std::cout << std::endl;
-//  doc->Print();
-//  std::cout << std::endl;
-//  delete doc;
-//}
-
 void checkMember(const Json::Value & v, const std::string & key)
 {
   if (!v.isObject() || !v.isMember(key)){
