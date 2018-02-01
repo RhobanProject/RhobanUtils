@@ -62,28 +62,6 @@ public:
   /// Still throws an exception if v[key] exists with an invalid content
   void tryRead(const Json::Value & v, const std::string & key, const std::string & dir_name = "./");
 
-  // TODO: check if this part is still necessary
-//  /// Write in the given stream the serializable object inside a node with the given key
-//  void write(const std::string & key, std::ostream & out) const;
-//
-//  /// In factoryWrite, the pattern is the following:
-//  /// <key><class_name>...</class_name></key>
-//  void factoryWrite(const std::string & key, std::ostream & out) const;
-//
-//  /// Update the object from the given node
-//  void read(TiXmlNode *node, const std::string & key);
-//
-//  /// Try to update the object from the given node
-//  /// Throw an exception:
-//  /// - if node is NULL
-//  /// - if an exception is thrown while reading the object from the xml tree
-//  /// DO NOT throw an exception (do not modify the object)
-//  /// - If there is no node with the right key
-//  void tryRead(TiXmlNode *node, const std::string & key);
-//
-//  /*! pretty print */
-//  void pretty_print() const;
-
 };
 
 /// Throws a JsonParsingError if v[key] does not exist
