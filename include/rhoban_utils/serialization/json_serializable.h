@@ -67,13 +67,24 @@ public:
 /// Throws a JsonParsingError if v[key] does not exist
 void checkMember(const Json::Value & v, const std::string & key);
 
-/// Throws a JsonParsingError if 'v' is not of type 'T'
-template <typename T> T getJsonVal(const Json::Value & v);
+/// There is no default getJsonVal
+template <typename T> T getJsonVal(const Json::Value & v) = delete;
 
 template <> bool        getJsonVal<bool>       (const Json::Value & v);
 template <> int         getJsonVal<int>        (const Json::Value & v);
+template <> float       getJsonVal<float>      (const Json::Value & v);
 template <> double      getJsonVal<double>     (const Json::Value & v);
 template <> std::string getJsonVal<std::string>(const Json::Value & v);
+
+/// There is no default val2Json
+template <typename T> Json::Value val2Json(const T & val) = delete;
+
+template <> Json::Value val2Json<bool>(const bool & val);
+template <> Json::Value val2Json<int>(const int & val);
+template <> Json::Value val2Json<float>(const float & val);
+template <> Json::Value val2Json<double>(const double & val);
+template <> Json::Value val2Json<std::string>(const std::string & val);
+
 
 /// Return an object of type 'T' if v[key] exists and is of type 'T'.
 /// Otherwise: throws a JsonParsingError
@@ -103,7 +114,7 @@ std::vector<T> readVector(const Json::Value & v, const std::string & key)
 {
   checkMember(v,key);
   if (!v[key].isArray()) {
-    throw JsonParsingError("Value at '" + key + "' is not an array");
+    throw JsonParsingError("readVector(): Value at '" + key + "' is not an array");
   }
   std::vector<T> result;
   for (Json::ArrayIndex idx=0; idx < v[key].size();idx++) {
@@ -125,7 +136,7 @@ static Json::Value vector2Json(const std::vector<T> & values)
 {
   Json::Value v;
   for (Json::ArrayIndex idx = 0; idx < values.size(); idx++) {
-    v[idx] = values[idx];
+    v[idx] = val2Json(values[idx]);
   }
   return v;
 }
@@ -176,6 +187,42 @@ void tryReadVector(const Json::Value & v,
   }
 }
 
+template <typename T>
+Json::Value map2Json(const std::map<std::string,T> & values)
+{
+  Json::Value v;
+  for (const auto & pair : values) {
+    v[pair.first] = val2Json(pair.second);
+  }
+  return v;
+}
+
+
+template <typename T>
+std::map<std::string, T> readMap(const Json::Value & v, const std::string & map_key) {
+  checkMember(v,map_key);
+  if (!v[map_key].isObject()) {
+    throw JsonParsingError("readMap(): Value at '" + map_key + "' is not an object");
+  }
+  // Parse entries:
+  const Json::Value & map_v = v[map_key];
+  std::map<std::string, T> result;
+  for (Json::ValueConstIterator it = map_v.begin(); it != map_v.end(); it++) {
+    const std::string & key = it.name();
+    result[key] = getJsonVal<T>(map_v[key]);
+  }
+  return result;
+}
+
+
+template <typename T>
+void tryReadMap(const Json::Value & v, const std::string & key, std::map<std::string, T> * ptr)
+{
+  if (v.isObject() && v.isMember(key)) {
+    *ptr = readMap<T>(v, key);
+  }
+}
+
 
 /// Read a map which has the following structure using the given builder
 /// {
@@ -193,7 +240,7 @@ std::map<std::string,T> readMap(const Json::Value & v,
   // Parse entries:
   std::map<std::string, T> result;
   for (Json::ValueConstIterator it = v.begin(); it != v.end(); it++) {
-    std::string key = it.name();
+    const std::string & key = it.name();
     result[key] = builder(v[key], dir_name);
   }
   return result;

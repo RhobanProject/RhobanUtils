@@ -166,4 +166,8 @@ double normalizeRad(double angleRad){
   return value;
 }
 
+template <> Angle getJsonVal<Angle>(const Json::Value & v) {
+  double val = getJsonVal<double>(v);
+  return Angle(val);
+}
 }

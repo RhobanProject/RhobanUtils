@@ -130,6 +130,14 @@ template <> int getJsonVal<int>(const Json::Value & v)
   return v.asInt(); 
 }
 
+template <> float getJsonVal<float>(const Json::Value & v)
+{
+  if (!v.isDouble()) {
+    throw JsonParsingError("Expecting a float");
+  }
+  return (float)v.asDouble(); 
+}
+
 template <> double getJsonVal<double>(const Json::Value & v)
 {
   if (!v.isDouble()) {
@@ -144,6 +152,26 @@ template <> std::string getJsonVal<std::string>(const Json::Value & v)
     throw JsonParsingError("Expecting a string");
   }
   return v.asString(); 
+}
+
+template <> Json::Value val2Json<bool>(const bool & val) {
+  return Json::Value(val);
+}
+
+template <> Json::Value val2Json<int>(const int & val) {
+  return Json::Value(val);
+}
+
+template <> Json::Value val2Json<float>(const float & val) {
+  return Json::Value(val);
+}
+
+template <> Json::Value val2Json<double>(const double & val) {
+  return Json::Value(val);
+}
+
+template <> Json::Value val2Json<std::string>(const std::string & val) {
+  return Json::Value(val);
 }
 
 Json::Value vector2Json(const Eigen::VectorXd & vec)

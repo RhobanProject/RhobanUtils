@@ -3,6 +3,8 @@
 #include <vector>
 #include <ostream>
 
+#include "serialization/json_serializable.h"
+
 namespace rhoban_utils
 {
 
@@ -57,5 +59,8 @@ double rad2deg(double radAngle);
 
 /// return the normalized angle in [-pi,pi] from radAngle
 double normalizeRad(double radAngle);
+
+/// Reading an Angle from a JsonValue
+template <> Angle getJsonVal<Angle>(const Json::Value & v);
 
 }
