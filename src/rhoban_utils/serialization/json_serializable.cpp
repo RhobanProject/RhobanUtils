@@ -65,7 +65,6 @@ void JsonSerializable::loadFile(const std::string & json_file,
   }
   Json::Value json_content =  file2Json(dir_path + json_file);
   try {
-    std::cout << "Reading : '" << json_file << "'" << std::endl;
     fromJson(json_content,dir_path);
   } catch (const JsonParsingError & exc) {
     throw JsonParsingError(std::string(exc.what()) + " while reading '" +

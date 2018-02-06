@@ -32,8 +32,7 @@ std::map<std::string, Function> Function::fromFile(std::string filename)
   try {
     json = rhoban_utils::file2Json(filename);
   } catch (const rhoban_utils::JsonParsingError & exc) {
-    std::cerr << "Function::fromFile: failed to load from '" << filename << "' :"
-              << exc.what() << std::endl;
+    std::cerr << exc.what() << std::endl;
     return result;
   }
   // Interpreting Json object
