@@ -29,12 +29,7 @@ std::map<std::string, Function> Function::fromFile(std::string filename)
   // Reading json content
   std::map<std::string, Function> result;
   Json::Value json;
-  try {
-    json = rhoban_utils::file2Json(filename);
-  } catch (const rhoban_utils::JsonParsingError & exc) {
-    std::cerr << exc.what() << std::endl;
-    return result;
-  }
+  json = rhoban_utils::file2Json(filename);
   // Interpreting Json object
   if (json.isObject()) {
     for (auto name : json.getMemberNames()) {
