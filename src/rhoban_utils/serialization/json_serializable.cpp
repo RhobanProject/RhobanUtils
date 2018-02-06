@@ -13,6 +13,32 @@ JsonParsingError::JsonParsingError(const std::string & what_arg)
 {
 }
 
+Json::Value file2Json(const std::string & path) {
+  // Read data
+  std::string data;
+  try {
+    data = file2string(path);
+  } catch (const std::runtime_error & exc) {
+    throw JsonParsingError("Failed to convert file '" + path + "' to string (" + exc.what() + ")");
+  }
+  // Create Json reader
+  // TODO: investigate all the flags
+  auto f=Json::Features::all();
+  f.allowComments_=true;
+  f.strictRoot_=false;
+  f.allowDroppedNullPlaceholders_=true;
+  f.allowNumericKeys_=true;
+  Json::Reader reader(f);
+  // Parse json
+  Json::Value json_content;
+  bool success = reader.parse(data, json_content);
+  if (!success) {
+    throw JsonParsingError("file2Json: failed to read in file '" + path + "' : "
+                           + reader.getFormattedErrorMessages());
+  }
+  return json_content;
+}
+
 JsonSerializable::JsonSerializable()
 {
 }
@@ -37,20 +63,7 @@ void JsonSerializable::loadFile(const std::string & json_file,
   if (dir_path[dir_path.size()-1] != '/') {
     throw std::logic_error("JsonSerializable::loadFile: dir_path should end by a '/', received : '" + dir_path + "'");
   }
-  // Read data
-  std::string data = file2string(dir_path + json_file);
-  // Create Json reader
-  // TODO: investigate all the flags
-  auto f=Json::Features::all();
-  f.allowComments_=true;
-  f.strictRoot_=false;
-  f.allowDroppedNullPlaceholders_=true;
-  f.allowNumericKeys_=true;
-  Json::Reader reader(f);
-  // Parse json
-  // TODO: treat errors properly
-  Json::Value json_content;
-  reader.parse(data, json_content);
+  Json::Value json_content =  file2Json(dir_path + json_file);
   try {
     std::cout << "Reading : '" << json_file << "'" << std::endl;
     fromJson(json_content,dir_path);

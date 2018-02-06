@@ -1,10 +1,12 @@
 #include <fstream>
+#include <iostream>
 #include <cstdlib>
 #include <cstdio>
 #include <json/json.h>
 
 #include "rhoban_utils/util.h"
 #include "rhoban_utils/spline/function.h"
+#include "rhoban_utils/serialization/json_serializable.h"
 
 namespace rhoban_utils
 {
@@ -24,70 +26,66 @@ void Function::clear()
 
 std::map<std::string, Function> Function::fromFile(std::string filename)
 {
-    auto data = file_get_contents(filename);
-    Json::Value json;
-    auto f=Json::Features::all();
-    f.allowComments_=true;
-    f.strictRoot_=false;
-    f.allowDroppedNullPlaceholders_=true;
-    f.allowNumericKeys_=true;
-    Json::Reader reader(f);
-    std::map<std::string, Function> result;
-
-    if (reader.parse(data, json)) {
-        if (json.isObject()) {
-            for (auto name : json.getMemberNames()) {
-                auto data = json[name];
-                Function f;
-                if (data.isArray()) {
-                    for (unsigned int k=0; k<data.size(); k++) {
-                        auto entry = data[k];
-                        if (entry.isArray() && entry.size()==2) {
-                            f.addPoint(entry[0].asDouble(), entry[1].asDouble());
-                        }
-                    }
-                }
-                result[name] = f;
-            }
-        }
-	else
-	  if (json.isArray()) {
-	    //fprintf(stderr,"START loading time based json file\n");
-	    for (unsigned int k=0; k<json.size(); k++) {
-	      auto entry = json[k];
-	      if (entry.isObject()){
-		std::map<std::string,double> settings;
-		for (auto name : entry.getMemberNames()) {
-		  auto value = entry[name];
-		  settings[name]=value.asDouble();
-		  //fprintf(stderr,"\t building settings: %s =>  %lf \n",name.c_str(),settings[name]);
-		}
-		double time=settings["time"];
-		//fprintf(stderr,"\ttime is %lf \n",time);
-		for(auto v : settings){
-		  if (v.first!="time"){
-		    if (result.find(v.first)==result.end()){
-		      result[v.first]=Function();
-		    }
-		    result[v.first].addPoint(time,v.second);
-		    //fprintf(stderr,"\tadd entry for %s : %lf = %lf \n",v.first.c_str(),time,v.second);
-		  }
-		}
-	      }
-	    }
-	    //fprintf(stderr,"END loading time based json file\n");
-	  }
-    }
-
-    //for(auto e : result){
-    //fprintf(stderr,"entries for %s : \n",e.first.c_str());
-    //for(int i=0;i<e.second.points_x.size();++i){
-    //fprintf(stderr,"\t%lf => %lf\n",e.second.points_x[i],e.second.points_y[i]);
-    //}
-    //}
-    
-    
+  // Reading json content
+  std::map<std::string, Function> result;
+  Json::Value json;
+  try {
+    json = rhoban_utils::file2Json(filename);
+  } catch (const rhoban_utils::JsonParsingError & exc) {
+    std::cerr << "Function::fromFile: failed to load from '" << filename << "' :"
+              << exc.what() << std::endl;
     return result;
+  }
+  // Interpreting Json object
+  if (json.isObject()) {
+    for (auto name : json.getMemberNames()) {
+      auto data = json[name];
+      Function f;
+      if (data.isArray()) {
+        for (unsigned int k=0; k<data.size(); k++) {
+          auto entry = data[k];
+          if (entry.isArray() && entry.size()==2) {
+            f.addPoint(entry[0].asDouble(), entry[1].asDouble());
+          }
+        }
+      }
+      result[name] = f;
+    }
+  }
+  else if (json.isArray()) {
+    //fprintf(stderr,"START loading time based json file\n");
+    for (unsigned int k=0; k<json.size(); k++) {
+      auto entry = json[k];
+      if (entry.isObject()){
+        std::map<std::string,double> settings;
+        for (auto name : entry.getMemberNames()) {
+          auto value = entry[name];
+          settings[name]=value.asDouble();
+          //fprintf(stderr,"\t building settings: %s =>  %lf \n",name.c_str(),settings[name]);
+        }
+        double time=settings["time"];
+        //fprintf(stderr,"\ttime is %lf \n",time);
+        for(auto v : settings){
+          if (v.first!="time"){
+            if (result.find(v.first)==result.end()){
+              result[v.first]=Function();
+            }
+            result[v.first].addPoint(time,v.second);
+            //fprintf(stderr,"\tadd entry for %s : %lf = %lf \n",v.first.c_str(),time,v.second);
+          }
+        }
+      }
+    }
+    //fprintf(stderr,"END loading time based json file\n");
+  }
+
+  //for(auto e : result){
+  //fprintf(stderr,"entries for %s : \n",e.first.c_str());
+  //for(int i=0;i<e.second.points_x.size();++i){
+  //fprintf(stderr,"\t%lf => %lf\n",e.second.points_x[i],e.second.points_y[i]);
+  //}
+  //}
+  return result;
 }
         
 void Function::toFile(std::map<std::string, Function> &splines, std::string filename)

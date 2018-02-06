@@ -15,6 +15,8 @@ public:
   JsonParsingError(const std::string & what_arg);
 };
 
+Json::Value file2Json(const std::string & path);
+
 class JsonSerializable
 {
 public:

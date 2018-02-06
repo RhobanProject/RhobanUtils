@@ -153,29 +153,12 @@ public:
   /// path: path to xml_file
   std::unique_ptr<T> buildFromJsonFile(const std::string &path) const
     {
-      // Read data
-      std::string data;
-      try {
-        data = file2string(path);
-      } catch (const std::runtime_error & exc) {
-        throw JsonParsingError(exc.what());
-      }
-      // Create Json reader
-      // TODO: investigate all the flags
-      auto f=Json::Features::all();
-      f.allowComments_=true;
-      f.strictRoot_=false;
-      f.allowDroppedNullPlaceholders_=true;
-      f.allowNumericKeys_=true;
-      Json::Reader reader(f);
       // Parse json
-      // TODO: treat errors properly
-      Json::Value json_content;
-      reader.parse(data, json_content);
       /// Build:
       std::string dir_path = getDirName(path);
       std::unique_ptr<T> obj;
       try {
+        Json::Value json_content = file2Json(path);
         obj = build(json_content, dir_path);
       } catch (const JsonParsingError & exc) {
         throw JsonParsingError(std::string(exc.what()) +

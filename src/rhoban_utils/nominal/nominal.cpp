@@ -5,6 +5,7 @@
 // #include <boost/math/distributions/chi_squared.hpp>
 
 #include "rhoban_utils/nominal/nominal.h"
+#include "rhoban_utils/serialization/json_serializable.h"
 
 namespace rhoban_utils
 {
@@ -196,14 +197,14 @@ void Nominal::saveToJson(std::string filename)
 void Nominal::loadJson(std::string filename)
 {
     Json::Value json;
-    Json::Reader reader;
+    try {
+        json = rhoban_utils::file2Json(filename);
+    } catch (const rhoban_utils::JsonParsingError & exc) {
+        std::cerr << "Nominal::loadJson: Failed to load from '" << filename << "' :"
+                  << exc.what() << std::endl;
+    }
 
-    std::ifstream i(filename);
-    std::string data((std::istreambuf_iterator<char>(i)),
-                     std::istreambuf_iterator<char>());
-    i.close();
-
-    if (reader.parse(data, json)) {
+    if (!json.isNull()) {
         int k = 0;
         for (auto e : json) {
             bins[k].values.clear();
